@@ -1,11 +1,21 @@
+import { HeroScene } from "./HeroScene";
+import { HeroContent } from "./HeroContent";
+
 export function Hero() {
   return (
-    <section>
-      <h1>Para Siempre, Ana Lucía</h1>
+    <section
+      className="
+      relative
+      flex
+      min-h-screen
+      items-center
+      justify-center
+      overflow-hidden
+      "
+    >
+      <HeroScene />
 
-      <p>
-        Porque algunos recuerdos merecen crecer contigo.
-      </p>
+      <HeroContent />
     </section>
   );
 }
