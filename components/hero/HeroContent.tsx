@@ -1,25 +1,52 @@
-import { Heading } from "../ui/Heading";
-import { Text } from "../ui/Text";
-import { Button } from "../ui/Button";
+"use client";
+
+import { motion } from "framer-motion";
+import { DisplayTitle, Paragraph } from "@/components/ui";
+import { PrimaryButton } from "@/components/ui/buttons/PrimaryButton";
 
 export function HeroContent() {
   return (
-    <div className="flex flex-col items-center text-center">
-      <span className="mb-6 text-2xl">✦</span>
+    <div className="relative z-10 flex flex-col items-center px-6 text-center">
+      <motion.span
+        className="mb-6 text-3xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        ✦
+      </motion.span>
 
-      <Heading>
-        Para Siempre,
-        <br />
-        Ana Lucía
-      </Heading>
+      <motion.div
+        initial={{ opacity: 0, y: 35 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 0.3 }}
+      >
+        <DisplayTitle>
+          Para Siempre,
+          <br />
+          Ana Lucía
+        </DisplayTitle>
+      </motion.div>
 
-      <Text>
-        Porque algunos recuerdos merecen crecer contigo.
-      </Text>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+      >
+        <Paragraph>
+          Porque algunos recuerdos merecen crecer contigo.
+        </Paragraph>
+      </motion.div>
 
-      <div className="mt-10">
-        <Button>Comenzar el viaje</Button>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+      >
+        <PrimaryButton>
+          Comenzar el viaje →
+        </PrimaryButton>
+      </motion.div>
     </div>
   );
 }

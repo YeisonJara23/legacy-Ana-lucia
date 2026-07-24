@@ -1,21 +1,29 @@
+const stars = Array.from({ length: 100 }, (_, index) => ({
+  id: index,
+  left: Math.random() * 100,
+  top: Math.random() * 100,
+  size: Math.random() * 3 + 1,
+  opacity: Math.random() * 0.6 + 0.2,
+}));
+
 export function Stars() {
   return (
     <>
-      <div className="absolute left-[20%] top-[15%] text-white/60">
-        ✦
-      </div>
-
-      <div className="absolute right-[15%] top-[25%] text-white/30">
-        ✧
-      </div>
-
-      <div className="absolute left-[70%] top-[60%] text-white/40">
-        ✦
-      </div>
-
-      <div className="absolute left-[40%] top-[75%] text-white/50">
-        ✧
-      </div>
+      {stars.map((star) => (
+        <span
+          key={star.id}
+          className="absolute select-none"
+          style={{
+            left: `${star.left}%`,
+            top: `${star.top}%`,
+            fontSize: `${star.size}px`,
+            opacity: star.opacity,
+            color: "white",
+          }}
+        >
+          ✦
+        </span>
+      ))}
     </>
   );
 }
