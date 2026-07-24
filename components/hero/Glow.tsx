@@ -1,6 +1,10 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export function Glow() {
   return (
-    <div
+    <motion.div
       className="
         absolute
         left-1/2
@@ -13,6 +17,15 @@ export function Glow() {
         bg-yellow-300/5
         blur-[140px]
       "
+      animate={{
+        scale: [1, 1.12, 1],
+        opacity: [0.5, 0.9, 0.5],
+      }}
+      transition={{
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
     />
   );
 }

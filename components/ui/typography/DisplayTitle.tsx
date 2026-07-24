@@ -4,14 +4,17 @@ type DisplayTitleProps = {
   children: ReactNode;
 };
 
-export function DisplayTitle({ children }: DisplayTitleProps) {
+export function DisplayTitle({
+  children,
+}: DisplayTitleProps) {
   return (
     <h1
       className="
-        text-5xl
-        md:text-7xl
-        lg:text-8xl
+        font-serif
+        text-6xl
+        md:text-8xl
         font-light
+        leading-none
         tracking-tight
         text-white
       "

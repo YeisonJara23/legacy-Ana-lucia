@@ -1,12 +1,22 @@
+"use client";
+
 import { ReactNode } from "react";
+import { motion } from "framer-motion";
 
 type PrimaryButtonProps = {
   children: ReactNode;
+  onClick?: () => void;
 };
 
-export function PrimaryButton({ children }: PrimaryButtonProps) {
+export function PrimaryButton({
+  children,
+  onClick,
+}: PrimaryButtonProps) {
   return (
-    <button
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.97 }}
       className="
         mt-10
         rounded-full
@@ -22,12 +32,11 @@ export function PrimaryButton({ children }: PrimaryButtonProps) {
         backdrop-blur-md
         transition-all
         duration-300
-        hover:scale-105
         hover:border-white/40
         hover:bg-white/10
       "
     >
       {children}
-    </button>
+    </motion.button>
   );
 }
