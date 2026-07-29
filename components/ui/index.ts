@@ -1,12 +1,10 @@
 // Typography
 export * from "./typography/DisplayTitle";
-export * from "./typography/Heading";
-export * from "./typography/Paragraph";
-export * from "./typography/Caption";
 
+export * from "./typography/Paragraph";
 // Buttons
-export * from "./buttons/PrimaryButton";
-export * from "./buttons/GhostButton";
+
+
 
 // Layout
 export * from "./layout/Container";
