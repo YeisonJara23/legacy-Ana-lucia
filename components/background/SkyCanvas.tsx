@@ -17,11 +17,19 @@ export function SkyCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    if (!canvas) return;
+    if (canvas === null) {
+      return;
+    }
 
     const ctx = canvas.getContext("2d");
 
-    if (!ctx) return;
+    if (ctx === null) {
+      return;
+    }
+
+    // Referencias no nulas para que TypeScript no genere errores
+    const canvasElement = canvas;
+    const context = ctx;
 
     let animationId = 0;
 
@@ -52,8 +60,8 @@ export function SkyCanvas() {
         }
 
         return {
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
+          x: Math.random() * canvasElement.width,
+          y: Math.random() * canvasElement.height,
           radius,
           alpha: Math.random(),
           speed,
@@ -63,8 +71,8 @@ export function SkyCanvas() {
     }
 
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = Math.max(
+      canvasElement.width = window.innerWidth;
+      canvasElement.height = Math.max(
         window.innerHeight,
         document.documentElement.scrollHeight
       );
@@ -77,39 +85,39 @@ export function SkyCanvas() {
     window.addEventListener("resize", resize);
 
     function drawNebulas() {
-      const gradient1 = ctx.createRadialGradient(
-        canvas.width * 0.25,
-        canvas.height * 0.2,
+      const gradient1 = context.createRadialGradient(
+        canvasElement.width * 0.25,
+        canvasElement.height * 0.2,
         100,
-        canvas.width * 0.25,
-        canvas.height * 0.2,
+        canvasElement.width * 0.25,
+        canvasElement.height * 0.2,
         600
       );
 
       gradient1.addColorStop(0, "rgba(255,170,240,0.12)");
       gradient1.addColorStop(1, "rgba(255,170,240,0)");
 
-      ctx.fillStyle = gradient1;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = gradient1;
+      context.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
-      const gradient2 = ctx.createRadialGradient(
-        canvas.width * 0.8,
-        canvas.height * 0.7,
+      const gradient2 = context.createRadialGradient(
+        canvasElement.width * 0.8,
+        canvasElement.height * 0.7,
         50,
-        canvas.width * 0.8,
-        canvas.height * 0.7,
+        canvasElement.width * 0.8,
+        canvasElement.height * 0.7,
         700
       );
 
       gradient2.addColorStop(0, "rgba(190,170,255,0.10)");
       gradient2.addColorStop(1, "rgba(190,170,255,0)");
 
-      ctx.fillStyle = gradient2;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = gradient2;
+      context.fillRect(0, 0, canvasElement.width, canvasElement.height);
     }
 
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      context.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
       drawNebulas();
 
@@ -124,9 +132,9 @@ export function SkyCanvas() {
           star.speed *= -1;
         }
 
-        ctx.beginPath();
+        context.beginPath();
 
-        ctx.arc(
+        context.arc(
           star.x,
           star.y,
           star.radius,
@@ -134,28 +142,28 @@ export function SkyCanvas() {
           Math.PI * 2
         );
 
-        ctx.fillStyle = `rgba(255,255,255,${star.alpha})`;
+        context.fillStyle = `rgba(255,255,255,${star.alpha})`;
 
-        ctx.shadowBlur = star.radius * 8;
+        context.shadowBlur = star.radius * 8;
 
         switch (star.layer) {
           case 1:
-            ctx.shadowColor = "#ffffff";
+            context.shadowColor = "#ffffff";
             break;
 
           case 2:
-            ctx.shadowColor = "#ffd6f7";
+            context.shadowColor = "#ffd6f7";
             break;
 
           case 3:
-            ctx.shadowColor = "#e6c7ff";
+            context.shadowColor = "#e6c7ff";
             break;
         }
 
-        ctx.fill();
+        context.fill();
       }
 
-      ctx.shadowBlur = 0;
+      context.shadowBlur = 0;
 
       animationId = requestAnimationFrame(draw);
     }
