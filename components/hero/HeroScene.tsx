@@ -9,9 +9,9 @@ export function HeroScene() {
     <>
       <HeroBackground />
 
-      <CursorGlow />
-
       <Glow />
+
+      <CursorGlow />
 
       <Stars />
 

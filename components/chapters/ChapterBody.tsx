@@ -8,7 +8,19 @@ export function ChapterBody({
   children,
 }: ChapterBodyProps) {
   return (
-    <div className="mx-auto max-w-5xl px-8">
+    <div
+      className="
+        mx-auto
+
+        max-w-4xl
+
+        text-center
+
+        font-[family:var(--font-body)]
+
+        text-[#FFF5FD]
+      "
+    >
       {children}
     </div>
   );

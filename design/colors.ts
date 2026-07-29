@@ -1,18 +1,21 @@
 export const colors = {
-  midnight: "#07111F",
-  night: "#0E1A2B",
+  background: "#FFF8FC",
 
-  starlight: "#F8F9FB",
+  backgroundSecondary: "#F7F0FF",
 
-  memoryGold: "#D8B25A",
+  surface: "rgba(255,255,255,.55)",
 
-  forest: "#3B5B46",
+  border: "rgba(183,148,246,.18)",
 
-  bloom: "#EBCFD8",
+  text: "#43334D",
 
-  paper: "#F6F2EB",
+  muted: "#77647F",
 
-  mist: "#D8DEE8",
+  primary: "#B794F6",
 
-  hope: "#B8D6FF",
+  secondary: "#F8AFCF",
+
+  glow: "#F5D0FE",
+
+  star: "#FFFFFF",
 };

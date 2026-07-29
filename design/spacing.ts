@@ -1,8 +1,11 @@
 export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 48,
-  xxl: 96,
+  section: "160px",
+
+  chapter: "220px",
+
+  photo: "120px",
+
+  paragraph: "48px",
+
+  card: "40px",
 };

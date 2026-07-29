@@ -1,42 +1,47 @@
-"use client";
-
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
 
 type PrimaryButtonProps = {
   children: ReactNode;
-  onClick?: () => void;
 };
 
 export function PrimaryButton({
   children,
-  onClick,
 }: PrimaryButtonProps) {
   return (
-    <motion.button
-      onClick={onClick}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.97 }}
+    <button
       className="
         mt-10
+
         rounded-full
-        border
-        border-white/20
-        bg-white/5
-        px-8
+
+        bg-gradient-to-r
+
+        from-[#F77DB8]
+
+        via-[#F69CD4]
+
+        to-[#C69AFF]
+
+        px-10
+
         py-4
-        text-sm
-        font-medium
-        tracking-wide
+
         text-white
-        backdrop-blur-md
+
+        font-semibold
+
+        shadow-[0_12px_35px_rgba(255,150,220,.35)]
+
         transition-all
-        duration-300
-        hover:border-white/40
-        hover:bg-white/10
+
+        duration-500
+
+        hover:scale-105
+
+        hover:shadow-[0_20px_45px_rgba(255,150,220,.45)]
       "
     >
       {children}
-    </motion.button>
+    </button>
   );
 }
