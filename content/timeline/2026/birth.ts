@@ -3,14 +3,14 @@ export const birth = {
 
   date: "23 de abril de 2026",
 
-  time: "9:30 a. m.",
+  time: "9:45 a. m.",
 
   location: "Ibagué, Tolima, Colombia",
 
   description: `
 Hoy el mundo se detuvo por un instante.
 
-A las 9:30 de la mañana llegaste para cambiar nuestras vidas.
+A las 9:45 de la mañana llegaste para cambiar nuestras vidas.
 
 Todavía no conocías nuestros nombres.
 

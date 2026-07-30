@@ -1,4 +1,5 @@
 import { HeroContent } from "./HeroContent";
+import { Container } from "@/components/ui/layout/Container";
 
 export function Hero() {
   return (
@@ -12,7 +13,9 @@ export function Hero() {
         overflow-hidden
       "
     >
-      <HeroContent />
+      <Container>
+        <HeroContent />
+      </Container>
     </section>
   );
 }
