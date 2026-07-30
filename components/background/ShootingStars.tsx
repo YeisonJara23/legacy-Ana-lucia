@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-export function ShootingStar() {
+export function ShootingStars() {
   return (
     <motion.div
       className="

@@ -1,4 +1,3 @@
-import { HeroScene } from "./HeroScene";
 import { HeroContent } from "./HeroContent";
 
 export function Hero() {
@@ -11,11 +10,8 @@ export function Hero() {
         items-center
         justify-center
         overflow-hidden
-        bg-transparent
       "
     >
-      <HeroScene />
-
       <HeroContent />
     </section>
   );

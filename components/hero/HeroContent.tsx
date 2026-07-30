@@ -1,75 +1,246 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { DisplayTitle, Paragraph } from "@/components/ui";
+
+import {
+  Heading,
+  Text,
+  Divider,
+} from "@/components/ui";
+
 import { PrimaryButton } from "@/components/ui/buttons/PrimaryButton";
 
 export function HeroContent() {
   const handleStart = () => {
-    document.getElementById("chapter-1")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    document
+      .getElementById("chapter-1")
+      ?.scrollIntoView({
+        behavior: "smooth",
+      });
   };
 
   return (
-    <div className="relative z-10 flex flex-col items-center px-6 text-center">
-      {/* Estrella superior */}
-      <motion.span
-        className="mb-6 text-3xl text-white"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        ✦
-      </motion.span>
+    <section
+  className="
+    relative
+    z-20
 
-      {/* Título */}
+    mx-auto
+
+    flex
+    min-h-screen
+
+    max-w-7xl
+
+    flex-col
+    items-center
+    justify-center
+
+    px-8
+
+    pt-10
+    pb-28
+
+    -translate-y-10
+
+    text-center
+  "
+>
+      {/* Estrella */}
+
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{
+          opacity: 0,
+          scale: 0,
+          rotate: -180,
+        }}
         animate={{
           opacity: 1,
-          y: [0, -8, 0],
+          scale: 1,
+          rotate: 0,
         }}
         transition={{
-          opacity: {
-            duration: 1.2,
-            delay: 0.3,
-          },
-          y: {
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          },
+          duration: 1.4,
         }}
       >
-        <DisplayTitle>
-          Para Siempre,
-          <br />
-          Ana Lucía
-        </DisplayTitle>
+        <motion.span
+          animate={{
+            scale: [1, 1.25, 1],
+            opacity: [0.8, 1, 0.8],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+          }}
+          className="
+            mb-10
+            block
+            text-5xl
+            text-pink-200
+            drop-shadow-[0_0_30px_rgba(255,190,240,.8)]
+          "
+        >
+          ✦
+        </motion.span>
       </motion.div>
 
-      {/* Descripción */}
+      {/* Título */}
+
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
+        initial={{
+          opacity: 0,
+          y: 60,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 1.2,
+        }}
       >
-        <Paragraph>
-          Porque algunos recuerdos merecen crecer contigo.
-        </Paragraph>
+        <Heading
+          variant="hero"
+          className="
+            text-center
+            leading-[0.95]
+          "
+        >
+          Para Siempre,
+
+          <br />
+
+          Ana Lucía
+        </Heading>
+      </motion.div>
+
+      {/* Línea */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          scaleX: 0,
+        }}
+        animate={{
+          opacity: 1,
+          scaleX: 1,
+        }}
+        transition={{
+          delay: 0.5,
+          duration: 1,
+        }}
+      >
+        <Divider />
+      </motion.div>
+
+      {/* Texto */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: 0.8,
+          duration: 1,
+        }}
+      >
+        <Text
+          variant="lead"
+          className="
+            mx-auto
+            mt-8
+            max-w-3xl
+            text-center
+            text-[#FFE8FA]
+          "
+        >
+          Porque algunos recuerdos nunca desaparecen.
+
+          <br />
+
+          Permanecen vivos en nuestra memoria,
+
+          <br />
+
+          creciendo con cada historia,
+
+          <br />
+
+          con cada fotografía,
+
+          <br />
+
+          y con cada latido.
+        </Text>
       </motion.div>
 
       {/* Botón */}
+
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        initial={{
+          opacity: 0,
+          y: 25,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: 1.2,
+          duration: 1,
+        }}
       >
-        <PrimaryButton onClick={handleStart}>
-          Comenzar el viaje →
+        <PrimaryButton
+          onClick={handleStart}
+        >
+          Comenzar el viaje
         </PrimaryButton>
       </motion.div>
-    </div>
+
+      {/* Indicador */}
+
+      <motion.div
+        className="
+          absolute
+          bottom-5
+          flex
+          flex-col
+          items-center
+        "
+        animate={{
+          y: [0, 12, 0],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+        }}
+      >
+        <span
+          className="
+            text-sm
+            tracking-[0.35em]
+            uppercase
+            text-pink-200/80
+          "
+        >
+          Descubre
+        </span>
+
+        <span
+          className="
+            mt-4
+            text-3xl
+            text-pink-300
+          "
+        >
+          ↓
+        </span>
+      </motion.div>
+    </section>
   );
 }
