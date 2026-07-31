@@ -1,51 +1,65 @@
-type TimelineYearProps = {
+"use client";
+
+import { motion } from "framer-motion";
+
+type Props = {
   year: string;
 };
 
 export function TimelineYear({
   year,
-}: TimelineYearProps) {
+}: Props) {
   return (
-    <div className="mb-32 text-center">
-      <h2
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: 40,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{
+        once: true,
+      }}
+      transition={{
+        duration: 0.8,
+      }}
+      className="
+        mb-28
+
+        flex
+        justify-center
+      "
+    >
+      <div
         className="
-          font-[family:var(--font-display)]
+          rounded-full
 
-          text-7xl
+          border
+          border-pink-200/20
 
-          md:text-8xl
+          bg-white/5
+
+          px-10
+          py-4
+
+          backdrop-blur-xl
+
+          text-4xl
+          md:text-5xl
 
           font-light
 
-          tracking-wide
+          tracking-[0.45em]
 
-          text-[#FFF8FD]
+          text-pink-100
 
-          drop-shadow-[0_0_30px_rgba(255,220,245,.55)]
+          shadow-[0_0_50px_rgba(255,190,235,.15)]
         "
       >
         {year}
-      </h2>
-
-      <div
-        className="
-          mx-auto
-
-          mt-10
-
-          h-32
-
-          w-px
-
-          bg-gradient-to-b
-
-          from-pink-200
-
-          via-pink-100
-
-          to-transparent
-        "
-      />
-    </div>
+      </div>
+    </motion.div>
   );
 }

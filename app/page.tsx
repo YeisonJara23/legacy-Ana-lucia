@@ -1,6 +1,6 @@
 import { Hero } from "@/components/hero/Hero";
 import { FirstLight } from "@/components/memories/FirstLight";
-
+import { ChapterIntro } from "@/components/chapters";
 import { Timeline } from "@/components/timeline/Timeline";
 import { TimelineYear } from "@/components/timeline/TimelineYear";
 import { TimelineEvent } from "@/components/timeline/TimelineEvent";
@@ -13,7 +13,11 @@ export default function Home() {
       <Hero />
 
       <FirstLight />
-
+      <ChapterIntro
+    chapter="Capítulo I"
+    year="2026"
+    subtitle="Todo comenzó con un pequeño milagro."
+/>
       <Timeline>
         <TimelineYear year="2026" />
 

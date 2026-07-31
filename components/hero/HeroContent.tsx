@@ -9,6 +9,7 @@ import {
 } from "@/components/ui";
 
 import { PrimaryButton } from "@/components/ui/buttons/PrimaryButton";
+import { ScrollIndicator } from "./ScrollIndicator";
 
 export function HeroContent() {
   const handleStart = () => {
@@ -21,31 +22,28 @@ export function HeroContent() {
 
   return (
     <section
-  className="
-    relative
-    z-20
+      className="
+        relative
+        z-20
 
-    mx-auto
+        flex
+        min-h-screen
+        w-full
 
-    flex
-    min-h-screen
+        flex-col
+        items-center
+        justify-center
 
-    max-w-7xl
+        px-6
+        sm:px-8
+        lg:px-12
 
-    flex-col
-    items-center
-    justify-center
+        pt-12
+        pb-32
 
-    px-8
-
-    pt-10
-    pb-28
-
-    -translate-y-10
-
-    text-center
-  "
->
+        text-center
+      "
+    >
       {/* Estrella */}
 
       <motion.div
@@ -71,13 +69,19 @@ export function HeroContent() {
           transition={{
             duration: 4,
             repeat: Infinity,
+            ease: "easeInOut",
           }}
           className="
-            mb-10
+            mb-8
+
             block
-            text-5xl
+
+            text-4xl
+            sm:text-5xl
+
             text-pink-200
-            drop-shadow-[0_0_30px_rgba(255,190,240,.8)]
+
+            drop-shadow-[0_0_35px_rgba(255,200,245,.85)]
           "
         >
           ✦
@@ -98,12 +102,18 @@ export function HeroContent() {
         transition={{
           duration: 1.2,
         }}
+        className="max-w-5xl"
       >
         <Heading
           variant="hero"
           className="
+            leading-[0.9]
+
             text-center
-            leading-[0.95]
+
+            text-white
+
+            drop-shadow-[0_0_30px_rgba(255,215,245,.25)]
           "
         >
           Para Siempre,
@@ -114,7 +124,7 @@ export function HeroContent() {
         </Heading>
       </motion.div>
 
-      {/* Línea */}
+      {/* Divider */}
 
       <motion.div
         initial={{
@@ -126,9 +136,10 @@ export function HeroContent() {
           scaleX: 1,
         }}
         transition={{
-          delay: 0.5,
+          delay: 0.4,
           duration: 1,
         }}
+        className="mt-8"
       >
         <Divider />
       </motion.div>
@@ -138,7 +149,7 @@ export function HeroContent() {
       <motion.div
         initial={{
           opacity: 0,
-          y: 30,
+          y: 35,
         }}
         animate={{
           opacity: 1,
@@ -148,32 +159,33 @@ export function HeroContent() {
           delay: 0.8,
           duration: 1,
         }}
+        className="mt-8"
       >
         <Text
           variant="lead"
           className="
             mx-auto
-            mt-8
-            max-w-3xl
+
+            max-w-2xl
+
             text-center
-            text-[#FFE8FA]
+
+            text-[#FFF2FD]
+
+            leading-9
+            lg:leading-10
           "
         >
           Porque algunos recuerdos nunca desaparecen.
 
           <br />
+          <br />
 
           Permanecen vivos en nuestra memoria,
 
-          <br />
-
           creciendo con cada historia,
 
-          <br />
-
-          con cada fotografía,
-
-          <br />
+          cada fotografía
 
           y con cada latido.
         </Text>
@@ -194,6 +206,7 @@ export function HeroContent() {
           delay: 1.2,
           duration: 1,
         }}
+        className="mt-14"
       >
         <PrimaryButton
           onClick={handleStart}
@@ -204,43 +217,18 @@ export function HeroContent() {
 
       {/* Indicador */}
 
-      <motion.div
+      <div
         className="
           absolute
-          bottom-5
-          flex
-          flex-col
-          items-center
-        "
-        animate={{
-          y: [0, 12, 0],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-        }}
-      >
-        <span
-          className="
-            text-sm
-            tracking-[0.35em]
-            uppercase
-            text-pink-200/80
-          "
-        >
-          Descubre
-        </span>
 
-        <span
-          className="
-            mt-4
-            text-3xl
-            text-pink-300
-          "
-        >
-          ↓
-        </span>
-      </motion.div>
+          bottom-8
+          left-1/2
+
+          -translate-x-1/2
+        "
+      >
+        <ScrollIndicator />
+      </div>
     </section>
   );
 }

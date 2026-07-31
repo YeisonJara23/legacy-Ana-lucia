@@ -1,82 +1,49 @@
-import { ReactNode } from "react";
+"use client";
 
-type TimelineProps = {
-  children: ReactNode;
-};
-
-export function Timeline({
-  children,
-}: TimelineProps) {
+export function TimelineLine() {
   return (
-    <section
+    <div
       className="
-        relative
-        overflow-hidden
+        pointer-events-none
 
-        py-44
+        absolute
+        left-1/2
+        top-0
 
-        bg-gradient-to-b
+        hidden
+        lg:block
 
-        from-[#D9C2F2]
+        h-full
+        w-px
 
-        via-[#E8D6F8]
-
-        to-[#F7ECFB]
+        -translate-x-1/2
       "
     >
-      {/* Glow izquierdo */}
+      {/* Línea principal */}
+      <div
+        className="
+          h-full
+          w-full
 
+          bg-gradient-to-b
+
+          from-transparent
+          via-pink-200/50
+          to-transparent
+        "
+      />
+
+      {/* Glow */}
       <div
         className="
           absolute
-
-          left-0
-          top-0
-
-          h-[700px]
-          w-[700px]
-
-          rounded-full
+          inset-0
 
           bg-pink-200/30
 
-          blur-[170px]
+          blur-xl
         "
       />
-
-      {/* Glow derecho */}
-
-      <div
-        className="
-          absolute
-
-          right-0
-          bottom-0
-
-          h-[650px]
-          w-[650px]
-
-          rounded-full
-
-          bg-violet-300/25
-
-          blur-[180px]
-        "
-      />
-
-      <div
-        className="
-          relative
-
-          mx-auto
-
-          max-w-6xl
-
-          px-6
-        "
-      >
-        {children}
-      </div>
-    </section>
+    </div>
   );
 }

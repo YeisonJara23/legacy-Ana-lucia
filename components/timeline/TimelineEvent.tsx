@@ -1,22 +1,30 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 
-type TimelineEventProps = {
+import { TimelineDivider } from "./TimelineDivider";
+import { TimelineGallery } from "./TimelineGallery";
+import { TimelineHeader } from "./TimelineHeader";
+import { TimelineMeta } from "./TimelineMeta";
+import { TimelineQuote } from "./TimelineQuote";
+
+import type { TimelineThemeName } from "./TimelineTheme";
+
+type Photo = {
+  src: string;
+  alt: string;
+  caption: string;
+};
+
+type Props = {
   title: string;
   date: string;
   time?: string;
   location?: string;
   description: string;
-
-  photos?: {
-    src: string;
-    alt: string;
-    caption: string;
-  }[];
-
-  children?: React.ReactNode;
+  photos?: Photo[];
+  quote?: string;
+  theme?: TimelineThemeName;
 };
 
 export function TimelineEvent({
@@ -25,266 +33,158 @@ export function TimelineEvent({
   time,
   location,
   description,
-  photos,
-  children,
-}: TimelineEventProps) {
+  photos = [],
+  quote,
+  theme = "default",
+}: Props) {
   return (
-    <motion.article
+    <motion.section
       initial={{
         opacity: 0,
-        y: 80,
+        y: 120,
+        filter: "blur(12px)",
       }}
       whileInView={{
         opacity: 1,
         y: 0,
+        filter: "blur(0px)",
       }}
       viewport={{
         once: true,
-        amount: 0.25,
+        amount: 0.15,
       }}
       transition={{
-        duration: 0.9,
+        duration: 1,
+        ease: "easeOut",
       }}
-      className="relative mx-auto mb-40 max-w-5xl"
+      className="
+        relative
+
+        mx-auto
+
+        mb-48
+
+        max-w-7xl
+
+        px-6
+        md:px-10
+        lg:px-16
+      "
     >
-      {/* Punto de la línea */}
+      {/* Glow decorativo */}
 
       <div
         className="
           absolute
-          -left-16
-          top-12
-          hidden
-          lg:flex
-          items-center
-          justify-center
+
+          left-1/2
+          top-40
+
+          -translate-x-1/2
+
+          h-80
+          w-80
+
+          rounded-full
+
+          bg-pink-200/10
+
+          blur-[120px]
+
+          pointer-events-none
         "
-      >
-        <div
-          className="
-            h-5
-            w-5
-            rounded-full
+      />
 
-            bg-gradient-to-br
+      {/* Cabecera */}
 
-            from-pink-300
-            via-fuchsia-300
-            to-violet-300
+      <TimelineHeader
+        title={title}
+        theme={theme}
+      />
 
-            shadow-[0_0_45px_rgba(255,180,235,.8)]
-          "
-        />
-      </div>
+      <TimelineDivider />
 
-      {/* Tarjeta */}
+      {/* Fecha */}
 
-      <div
+      <TimelineMeta
+        date={date}
+        time={time}
+        location={location}
+      />
+
+      <TimelineDivider />
+
+      {/* Historia */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: 35,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          delay: 0.25,
+          duration: 0.9,
+        }}
         className="
-          relative
+          mx-auto
 
-          overflow-hidden
+          mt-12
 
-          rounded-[42px]
-
-          border
-          border-white/15
-
-          bg-white/5
-
-          backdrop-blur-xl
-
-          p-12
-
-          shadow-[0_20px_80px_rgba(40,15,90,.35)]
-
-          transition-all
-
-          duration-500
-
-          hover:-translate-y-1
-
-          hover:border-pink-200/30
+          max-w-3xl
         "
       >
-        {/* Glow */}
-
-        <div
+        <p
           className="
-            absolute
+            whitespace-pre-line
 
-            inset-0
+            text-center
 
-            rounded-[42px]
+            text-xl
+            md:text-2xl
 
-            bg-gradient-to-br
+            font-light
 
-            from-pink-300/10
+            leading-[2.3]
 
-            via-transparent
+            tracking-wide
 
-            to-violet-300/10
-
-            pointer-events-none
+            text-[#FFF8FD]
           "
-        />
+        >
+          {description}
+        </p>
+      </motion.div>
 
-        <div className="relative z-10">
-          {/* Fecha */}
+      {/* Fotografías */}
 
-          <div
-  className="
-    flex
+      {photos.length > 0 && (
+        <>
+          <TimelineDivider />
 
-    justify-center
-
-    flex-wrap
-
-    gap-8
-
-    text-base
-
-    font-semibold
-
-    tracking-[0.18em]
-
-    uppercase
-
-    text-[#FFD8F4]
-
-    drop-shadow-[0_2px_10px_rgba(0,0,0,.30)]
-  "
->
-  <span>📅 {date}</span>
-
-  {time && <span>🕘 {time}</span>}
-
-  {location && <span>📍 {location}</span>}
-</div>
-
-          {/* Título */}
-
-          <h3
-  className="
-    mt-10
-
-    text-center
-
-    font-[family:var(--font-display)]
-
-    text-6xl
-
-    md:text-7xl
-
-    lg:text-8xl
-
-    font-light
-
-    tracking-wide
-
-    text-[#FFF9FE]
-
-    drop-shadow-[0_0_30px_rgba(255,220,245,.55)]
-  "
->
-  {title}
-</h3>
-
-          {/* Línea */}
-
-          <div
-            className="
-              my-10
-
-              h-px
-
-              bg-gradient-to-r
-
-              from-transparent
-
-              via-pink-200
-
-              to-transparent
-            "
+          <TimelineGallery
+            photos={photos}
           />
+        </>
+      )}
 
-          {/* Texto */}
+      {/* Frase */}
 
-          <p
-  className="
-    whitespace-pre-line
+      {quote && (
+        <>
+          <TimelineDivider />
 
-    text-2xl
-
-    leading-[2.6rem]
-
-    font-[family:var(--font-body)]
-
-    text-[#FFF6FD]
-
-    drop-shadow-[0_2px_10px_rgba(0,0,0,.35)]
-  "
->
-            {description}
-          </p>
-
-          {/* Galería */}
-
-          {photos && (
-            <div className="mt-16 grid gap-12 md:grid-cols-2">
-              {photos.map((photo) => (
-                <figure key={photo.src}>
-                  <div className="overflow-hidden rounded-3xl">
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      width={900}
-                      height={1200}
-                      className="
-                        w-full
-
-                        h-auto
-
-                        rounded-3xl
-
-                        object-cover
-
-                        shadow-[0_30px_80px_rgba(0,0,0,.35)]
-
-                        transition-all
-
-                        duration-700
-
-                        hover:scale-[1.03]
-                      "
-                    />
-                  </div>
-
-                  <figcaption
-                    className="
-                      mt-6
-
-                      text-center
-
-                      text-base
-
-                      italic
-
-                      leading-7
-
-                      text-pink-100
-                    "
-                  >
-                    {photo.caption}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          )}
-
-          {children}
-        </div>
-      </div>
-    </motion.article>
+          <TimelineQuote>
+            {quote}
+          </TimelineQuote>
+        </>
+      )}
+    </motion.section>
   );
 }

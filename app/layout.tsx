@@ -6,6 +6,8 @@ import {
 
 import "./globals.css";
 import { Background } from "@/components/background/Background";
+import { TimelineNavigation } from "@/components/navigation";
+import { ReadingProgress } from "@/components/navigation/ReadingProgress";
 
 const display = Cormorant_Garamond({
   subsets: ["latin"],
@@ -39,6 +41,8 @@ export default function RootLayout({
         `}
       >
         <Background />
+        <TimelineNavigation />
+        <ReadingProgress />
         {children}
       </body>
     </html>

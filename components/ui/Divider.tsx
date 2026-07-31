@@ -1,33 +1,24 @@
 export function Divider() {
   return (
-    <div className="relative my-16 flex justify-center">
-      <div
-        className="
+    <div
+      className="
+        mx-auto
+
+        my-10
+
         h-px
-        w-72
 
-        bg-gradient-to-r
+        w-40
+        sm:w-52
+        lg:w-72
 
-        from-transparent
-
-        via-pink-300
-
-        to-transparent
-        "
-      />
-
-      <div
-        className="
-        absolute
-        h-2
-        w-2
         rounded-full
 
-        bg-pink-300
-
-        shadow-[0_0_25px_rgba(255,170,240,.9)]
-        "
-      />
-    </div>
+        bg-gradient-to-r
+        from-transparent
+        via-pink-300/80
+        to-transparent
+      "
+    />
   );
 }
