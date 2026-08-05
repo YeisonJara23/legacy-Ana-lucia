@@ -1,6 +1,5 @@
-"use client";
-
 import type { ReactNode } from "react";
+
 import { TimelineLine } from "./TimelineLine";
 
 type TimelineProps = {
@@ -12,48 +11,19 @@ export function Timeline({
 }: TimelineProps) {
   return (
     <section
-     className="
-relative
+      id="timeline"
+      className="
+        relative
 
-overflow-hidden
+        overflow-hidden
 
-py-44
+        bg-transparent
 
-bg-transparent
-"
+        py-20
+        sm:py-28
+        md:py-36
+      "
     >
-      {/* Glow izquierdo */}
-      <div
-        className="
-          absolute
-          left-0
-          top-0
-
-          h-[700px]
-          w-[700px]
-
-          rounded-full
-          bg-pink-200/30
-          blur-[170px]
-        "
-      />
-
-      {/* Glow derecho */}
-      <div
-        className="
-          absolute
-          right-0
-          bottom-0
-
-          h-[650px]
-          w-[650px]
-
-          rounded-full
-          bg-violet-300/25
-          blur-[180px]
-        "
-      />
-
       <TimelineLine />
 
       <div
@@ -62,9 +32,13 @@ bg-transparent
           z-10
 
           mx-auto
-          max-w-6xl
+          w-full
+          max-w-7xl
 
-          px-6
+          px-3
+          sm:px-5
+          md:px-8
+          lg:px-12
         "
       >
         {children}

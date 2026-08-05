@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+
 import { useRef } from "react";
 
 import { StoryPhoto } from "./StoryPhoto";
@@ -17,30 +22,30 @@ export function StorySection({
   src,
   alt,
   caption,
-  priority,
+  priority = false,
 }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 80%", "center center"],
+    target: sectionRef,
+    offset: ["start 90%", "center center"],
   });
 
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.3, 1],
-    [0.4, 1, 1]
+    [0, 0.35, 1],
+    [0.45, 1, 1]
   );
 
   const scale = useTransform(
     scrollYProgress,
-    [0, 0.4, 1],
-    [0.96, 1, 1]
+    [0, 0.45, 1],
+    [0.97, 1, 1]
   );
 
   return (
     <motion.section
-      ref={ref}
+      ref={sectionRef}
       style={{
         opacity,
         scale,
@@ -50,25 +55,32 @@ export function StorySection({
 
         mx-auto
 
-        my-40
+        my-20
+        sm:my-24
+        md:my-32
 
-        max-w-7xl
+        w-full
+        max-w-[820px]
 
-        px-6
+        bg-transparent
+
+        px-3
+        sm:px-5
+        md:px-6
       "
     >
       <div className="relative">
-
         <StoryPhoto
           src={src}
           alt={alt}
           priority={priority}
         />
 
-        <StoryCaption>
-          {caption}
-        </StoryCaption>
-
+        {caption.trim() && (
+          <StoryCaption>
+            {caption}
+          </StoryCaption>
+        )}
       </div>
     </motion.section>
   );

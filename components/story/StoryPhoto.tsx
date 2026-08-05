@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+
+import {
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+
 import { useRef } from "react";
 
 type Props = {
@@ -15,108 +21,145 @@ export function StoryPhoto({
   alt,
   priority = false,
 }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: photoRef,
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [-70, 70]);
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [-18, 18]
+  );
 
   const scale = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    [1.12, 1.02, 1.12]
+    [1.025, 1, 1.025]
   );
 
   return (
     <div
-      ref={ref}
+      ref={photoRef}
       className="
         relative
 
+        flex
+        min-h-[320px]
+        w-full
+
+        items-center
+        justify-center
+
         overflow-hidden
 
-        rounded-[40px]
+        rounded-[24px]
+        sm:rounded-[30px]
+        md:rounded-[36px]
 
         border
         border-white/15
 
-        bg-white/5
+        bg-black/10
 
-        shadow-[0_80px_200px_rgba(0,0,0,.45)]
+        shadow-[0_35px_100px_rgba(39,16,88,.28)]
+
+        ring-1
+        ring-inset
+        ring-white/10
       "
     >
-      {/* Luz */}
-
-      <div
-        className="
-          absolute
-          inset-0
-
-          z-20
-
-          bg-gradient-to-t
-
-          from-black/20
-
-          via-transparent
-
-          to-white/10
-        "
-      />
-
       <motion.div
         style={{
           y,
           scale,
         }}
+        className="
+          relative
+
+          flex
+          w-full
+
+          items-center
+          justify-center
+        "
       >
-        <div
-  className="
-    pointer-events-none
-
-    absolute
-    inset-0
-
-    z-20
-
-    bg-gradient-to-t
-
-    from-black/30
-    via-transparent
-    to-white/10
-  "
-/>
-
-<div
-  className="
-    pointer-events-none
-
-    absolute
-
-    inset-0
-
-    z-30
-
-    bg-[radial-gradient(circle_at_center,rgba(255,255,255,.15),transparent_70%)]
-  "
-/>
         <Image
           src={src}
           alt={alt}
-          width={2400}
-          height={1600}
+          width={1600}
+          height={2000}
           priority={priority}
+          sizes="
+            (max-width: 640px) 94vw,
+            (max-width: 1024px) 82vw,
+            820px
+          "
           className="
             block
 
             h-auto
-            w-full
+            max-h-[72vh]
+            w-auto
+            max-w-full
+
+            object-contain
           "
         />
       </motion.div>
+
+      {/* Sombra inferior para facilitar la lectura */}
+      <div
+        className="
+          pointer-events-none
+
+          absolute
+          inset-0
+
+          z-10
+
+          bg-gradient-to-t
+
+          from-black/30
+          via-transparent
+          to-white/5
+        "
+      />
+
+      {/* Halo central suave */}
+      <div
+        className="
+          pointer-events-none
+
+          absolute
+          inset-0
+
+          z-10
+
+          bg-[radial-gradient(circle_at_center,rgba(255,255,255,.08),transparent_68%)]
+        "
+      />
+
+      {/* Borde interior */}
+      <div
+        className="
+          pointer-events-none
+
+          absolute
+          inset-0
+
+          z-20
+
+          rounded-[24px]
+          sm:rounded-[30px]
+          md:rounded-[36px]
+
+          border
+          border-white/10
+        "
+      />
     </div>
   );
 }

@@ -1,11 +1,13 @@
 import { Hero } from "@/components/hero/Hero";
 import { FirstLight } from "@/components/memories/FirstLight";
-import { ChapterIntro } from "@/components/chapters";
-import { Timeline } from "@/components/timeline/Timeline";
-import { TimelineYear } from "@/components/timeline/TimelineYear";
-import { TimelineEvent } from "@/components/timeline/TimelineEvent";
+import { ChapterIntro } from "@/components/chapters/ChapterIntro";
 
-import { birth } from "@/content/timeline/2026/birth";
+import { Timeline } from "@/components/timeline/Timeline";
+import { TimelineMediaSection } from "@/components/timeline/TimelineMediaSection";
+
+import {
+  anaLuciaMedia,
+} from "../content/timeline/2026/ana-lucia-media";
 
 export default function Home() {
   return (
@@ -13,22 +15,20 @@ export default function Home() {
       <Hero />
 
       <FirstLight />
-      <ChapterIntro
-    chapter="Capítulo I"
-    year="2026"
-    subtitle="Todo comenzó con un pequeño milagro."
-/>
-      <Timeline>
-        <TimelineYear year="2026" />
 
-        <TimelineEvent
-    title={birth.title}
-    date={birth.date}
-    time={birth.time}
-    location={birth.location}
-    description={birth.description}
-    photos={birth.photos}
-/>
+      <ChapterIntro
+        chapter="Capítulo I"
+        year="2026"
+        subtitle="Todo comenzó con un pequeño milagro."
+      />
+
+      <Timeline>
+        {anaLuciaMedia.map((section) => (
+          <TimelineMediaSection
+            key={section.id}
+            section={section}
+          />
+        ))}
       </Timeline>
     </>
   );

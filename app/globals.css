@@ -1,61 +1,44 @@
 @import "tailwindcss";
 
-:root{
-
-    --background:#7650D6;
-
-    --text:#FFF8FD;
-
-    --text-soft:#F7EBFF;
-
-    --pink:#FFD6F3;
-
-    --lavender:#E7C8FF;
-
+:root {
+  --background: #7650d6;
+  --text: #fff8fd;
+  --text-soft: #f7ebff;
+  --pink: #ffd6f3;
+  --lavender: #e7c8ff;
 }
 
-html{
-
-    scroll-behavior:smooth;
-
+html {
+  scroll-behavior: smooth;
 }
 
-body{
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
 
-    margin:0;
+  color: var(--text);
+  font-family: var(--font-body);
 
-    min-height:100vh;
-
-    overflow-x:hidden;
-
-    color:var(--text);
-
-    font-family:var(--font-body);
-
-    background:
-
-    radial-gradient(circle at top,
-    rgba(255,200,240,.25),
-    transparent 28%),
-
-    radial-gradient(circle at bottom right,
-    rgba(220,180,255,.18),
-    transparent 30%),
-
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(255, 200, 240, 0.25),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(220, 180, 255, 0.18),
+      transparent 30%
+    ),
     linear-gradient(
-
-        180deg,
-
-        #7650D6 0%,
-
-        #8660DD 25%,
-
-        #9572E6 50%,
-
-        #A786EE 75%,
-
-        #BA9AF6 100%
-
+      180deg,
+      #7650d6 0%,
+      #8660dd 25%,
+      #9572e6 50%,
+      #a786ee 75%,
+      #ba9af6 100%
     );
 
+  background-attachment: fixed;
 }
