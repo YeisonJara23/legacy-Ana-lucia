@@ -6,11 +6,11 @@ import { TimelineDivider } from "./TimelineDivider";
 import { TimelineMedia } from "./TimelineMedia";
 
 import type {
-  TimelineMediaSection as TimelineMediaSectionType,
-} from "@/content/timeline/2026/ana-lucia-media";
+  TimelineMediaSectionData,
+} from "./types";
 
 type TimelineMediaSectionProps = {
-  section: TimelineMediaSectionType;
+  section: TimelineMediaSectionData;
 };
 
 export function TimelineMediaSection({
@@ -21,10 +21,8 @@ export function TimelineMediaSection({
       id={section.id}
       className="
         relative
-
         mx-auto
         w-full
-
         bg-transparent
 
         py-20
@@ -32,14 +30,13 @@ export function TimelineMediaSection({
         md:py-32
       "
     >
+      {/* Iluminación decorativa */}
       <div
         className="
           pointer-events-none
-
           absolute
           left-1/2
           top-28
-
           -z-10
 
           h-64
@@ -48,9 +45,7 @@ export function TimelineMediaSection({
           -translate-x-1/2
 
           rounded-full
-
           bg-pink-300/10
-
           blur-[130px]
         "
       />
@@ -80,7 +75,6 @@ export function TimelineMediaSection({
           max-w-4xl
 
           px-5
-
           text-center
         "
       >
@@ -102,7 +96,6 @@ export function TimelineMediaSection({
             mt-6
 
             font-display
-
             text-4xl
             font-light
             leading-tight
