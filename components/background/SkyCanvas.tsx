@@ -8,128 +8,291 @@ type Star = {
   radius: number;
   alpha: number;
   speed: number;
-  layer: 1 | 2 | 3;
 };
 
 export function SkyCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef =
+    useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    /*
+     * ==========================================
+     * OBTENER CANVAS
+     * ==========================================
+     */
 
-    if (canvas === null) {
+    const currentCanvas =
+      canvasRef.current;
+
+    if (!currentCanvas) {
       return;
     }
 
-    const ctx = canvas.getContext("2d");
+    const currentContext =
+      currentCanvas.getContext("2d");
 
-    if (ctx === null) {
+    if (!currentContext) {
       return;
     }
 
-    // Referencias no nulas para que TypeScript no genere errores
-    const canvasElement = canvas;
-    const context = ctx;
+    /*
+     * Creamos referencias ya comprobadas.
+     *
+     * De esta forma TypeScript sabe que nunca
+     * serán null dentro de las funciones que
+     * definimos más abajo.
+     */
+    const canvas: HTMLCanvasElement =
+      currentCanvas;
+
+    const context: CanvasRenderingContext2D =
+      currentContext;
+
+    /*
+     * ==========================================
+     * VARIABLES
+     * ==========================================
+     */
 
     let animationId = 0;
 
     let stars: Star[] = [];
 
+    let isMobile =
+      window.innerWidth < 768;
+
+    const reducedMotion =
+      window
+        .matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        )
+        .matches;
+
+    /*
+     * ==========================================
+     * CREAR ESTRELLAS
+     * ==========================================
+     */
+
     function createStars() {
-      stars = Array.from({ length: 1200 }, () => {
-        const layer = (Math.floor(Math.random() * 3) + 1) as 1 | 2 | 3;
+      isMobile =
+        window.innerWidth < 768;
 
-        let radius = 1;
-        let speed = 0.004;
+      const starCount =
+        isMobile
+          ? 110
+          : 240;
 
-        switch (layer) {
-          case 1:
-            radius = Math.random() * 0.8 + 0.3;
-            speed = 0.002;
-            break;
+      stars = Array.from(
+        {
+          length: starCount,
+        },
+        () => ({
+          x:
+            Math.random() *
+            window.innerWidth,
 
-          case 2:
-            radius = Math.random() * 1.8 + 0.8;
-            speed = 0.004;
-            break;
+          y:
+            Math.random() *
+            window.innerHeight,
 
-          case 3:
-            radius = Math.random() * 2.8 + 1.2;
-            speed = 0.006;
-            break;
-        }
+          radius:
+            Math.random() *
+              (isMobile
+                ? 1.1
+                : 1.6) +
+            0.25,
 
-        return {
-          x: Math.random() * canvasElement.width,
-          y: Math.random() * canvasElement.height,
-          radius,
-          alpha: Math.random(),
-          speed,
-          layer,
-        };
-      });
+          alpha:
+            Math.random() * 0.55 +
+            0.25,
+
+          speed:
+            Math.random() * 0.003 +
+            0.001,
+        })
+      );
     }
 
+    /*
+     * ==========================================
+     * AJUSTAR CANVAS
+     * ==========================================
+     */
+
     function resize() {
-      canvasElement.width = window.innerWidth;
-      canvasElement.height = Math.max(
-        window.innerHeight,
-        document.documentElement.scrollHeight
+      /*
+       * Limitamos el DPR para evitar que móviles
+       * con pantallas de alta densidad creen un
+       * canvas demasiado pesado.
+       */
+      const dpr = Math.min(
+        window.devicePixelRatio || 1,
+        1.5
+      );
+
+      const width =
+        window.innerWidth;
+
+      const height =
+        window.innerHeight;
+
+      canvas.width =
+        Math.floor(width * dpr);
+
+      canvas.height =
+        Math.floor(height * dpr);
+
+      canvas.style.width =
+        `${width}px`;
+
+      canvas.style.height =
+        `${height}px`;
+
+      /*
+       * Reinicia la transformación y adapta
+       * el contexto al DPR.
+       */
+      context.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
       );
 
       createStars();
     }
 
-    resize();
+    /*
+     * ==========================================
+     * LUCES DEL FONDO
+     * ==========================================
+     */
 
-    window.addEventListener("resize", resize);
+    function drawBackground() {
+      const width =
+        window.innerWidth;
 
-    function drawNebulas() {
-      const gradient1 = context.createRadialGradient(
-        canvasElement.width * 0.25,
-        canvasElement.height * 0.2,
-        100,
-        canvasElement.width * 0.25,
-        canvasElement.height * 0.2,
-        600
+      const height =
+        window.innerHeight;
+
+      /*
+       * Glow rosado superior izquierdo
+       */
+
+      const pinkGlow =
+        context.createRadialGradient(
+          width * 0.24,
+          height * 0.18,
+          20,
+
+          width * 0.24,
+          height * 0.18,
+
+          Math.max(
+            width,
+            height
+          ) * 0.65
+        );
+
+      pinkGlow.addColorStop(
+        0,
+        "rgba(255,170,240,0.08)"
       );
 
-      gradient1.addColorStop(0, "rgba(255,170,240,0.12)");
-      gradient1.addColorStop(1, "rgba(255,170,240,0)");
-
-      context.fillStyle = gradient1;
-      context.fillRect(0, 0, canvasElement.width, canvasElement.height);
-
-      const gradient2 = context.createRadialGradient(
-        canvasElement.width * 0.8,
-        canvasElement.height * 0.7,
-        50,
-        canvasElement.width * 0.8,
-        canvasElement.height * 0.7,
-        700
+      pinkGlow.addColorStop(
+        1,
+        "rgba(255,170,240,0)"
       );
 
-      gradient2.addColorStop(0, "rgba(190,170,255,0.10)");
-      gradient2.addColorStop(1, "rgba(190,170,255,0)");
+      context.fillStyle =
+        pinkGlow;
 
-      context.fillStyle = gradient2;
-      context.fillRect(0, 0, canvasElement.width, canvasElement.height);
+      context.fillRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+      /*
+       * Glow violeta inferior derecho
+       */
+
+      const violetGlow =
+        context.createRadialGradient(
+          width * 0.8,
+          height * 0.75,
+          20,
+
+          width * 0.8,
+          height * 0.75,
+
+          Math.max(
+            width,
+            height
+          ) * 0.7
+        );
+
+      violetGlow.addColorStop(
+        0,
+        "rgba(190,170,255,0.08)"
+      );
+
+      violetGlow.addColorStop(
+        1,
+        "rgba(190,170,255,0)"
+      );
+
+      context.fillStyle =
+        violetGlow;
+
+      context.fillRect(
+        0,
+        0,
+        width,
+        height
+      );
     }
 
-    function draw() {
-      context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    /*
+     * ==========================================
+     * DIBUJAR ESTRELLAS
+     * ==========================================
+     */
 
-      drawNebulas();
-
+    function drawStars() {
       for (const star of stars) {
-        star.alpha += star.speed;
+        /*
+         * Parpadeo muy suave.
+         *
+         * Si el usuario tiene activado
+         * reduced-motion las estrellas
+         * permanecen estáticas.
+         */
+        if (!reducedMotion) {
+          star.alpha +=
+            star.speed;
 
-        if (star.alpha >= 1) {
-          star.speed *= -1;
-        }
+          if (
+            star.alpha >= 0.88
+          ) {
+            star.speed =
+              -Math.abs(
+                star.speed
+              );
+          }
 
-        if (star.alpha <= 0.2) {
-          star.speed *= -1;
+          if (
+            star.alpha <= 0.2
+          ) {
+            star.speed =
+              Math.abs(
+                star.speed
+              );
+          }
         }
 
         context.beginPath();
@@ -142,51 +305,103 @@ export function SkyCanvas() {
           Math.PI * 2
         );
 
-        context.fillStyle = `rgba(255,255,255,${star.alpha})`;
-
-        context.shadowBlur = star.radius * 8;
-
-        switch (star.layer) {
-          case 1:
-            context.shadowColor = "#ffffff";
-            break;
-
-          case 2:
-            context.shadowColor = "#ffd6f7";
-            break;
-
-          case 3:
-            context.shadowColor = "#e6c7ff";
-            break;
-        }
+        context.fillStyle =
+          `rgba(255,255,255,${star.alpha})`;
 
         context.fill();
       }
-
-      context.shadowBlur = 0;
-
-      animationId = requestAnimationFrame(draw);
     }
+
+    /*
+     * ==========================================
+     * DIBUJAR ESCENA
+     * ==========================================
+     */
+
+    function draw() {
+      const width =
+        window.innerWidth;
+
+      const height =
+        window.innerHeight;
+
+      context.clearRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+      drawBackground();
+
+      drawStars();
+
+      /*
+       * Solo mantenemos requestAnimationFrame
+       * cuando las animaciones están permitidas.
+       */
+      if (!reducedMotion) {
+        animationId =
+          window.requestAnimationFrame(
+            draw
+          );
+      }
+    }
+
+    /*
+     * ==========================================
+     * INICIO
+     * ==========================================
+     */
+
+    resize();
 
     draw();
 
+    /*
+     * ==========================================
+     * RESIZE
+     * ==========================================
+     */
+
+    window.addEventListener(
+      "resize",
+      resize
+    );
+
+    /*
+     * ==========================================
+     * LIMPIEZA
+     * ==========================================
+     */
+
     return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
+      window.cancelAnimationFrame(
+        animationId
+      );
+
+      window.removeEventListener(
+        "resize",
+        resize
+      );
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: "fixed",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: -40,
-      }}
+      aria-hidden="true"
+      className="
+        pointer-events-none
+
+        fixed
+        inset-0
+
+        -z-40
+
+        h-screen
+        w-screen
+      "
     />
   );
 }

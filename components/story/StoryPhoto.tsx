@@ -1,53 +1,77 @@
-"use client";
-
 import Image from "next/image";
 
-import {
-  motion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-
-import { useRef } from "react";
+import type {
+  TimelinePhotoLayout,
+} from "@/components/timeline/types";
 
 type Props = {
   src: string;
   alt: string;
+
   priority?: boolean;
+  featured?: boolean;
+
+  layout?: TimelinePhotoLayout;
 };
 
 export function StoryPhoto({
   src,
   alt,
+
   priority = false,
+  featured = false,
+
+  layout = "center",
 }: Props) {
-  const photoRef = useRef<HTMLDivElement>(null);
+  const imageHeightClasses: Record<
+    TimelinePhotoLayout,
+    string
+  > = {
+    center:
+      "max-h-[68vh]",
 
-  const { scrollYProgress } = useScroll({
-    target: photoRef,
-    offset: ["start end", "end start"],
-  });
+    left:
+      "max-h-[70vh]",
 
-  const y = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [-18, 18]
-  );
+    right:
+      "max-h-[70vh]",
 
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [1.025, 1, 1.025]
-  );
+    portrait:
+      "max-h-[78vh]",
+
+    wide:
+      "max-h-[76vh]",
+  };
+
+  const sizes: Record<
+    TimelinePhotoLayout,
+    string
+  > = {
+    center:
+      "(max-width: 640px) 92vw, (max-width: 1024px) 78vw, 760px",
+
+    left:
+      "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
+
+    right:
+      "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
+
+    portrait:
+      "(max-width: 640px) 88vw, (max-width: 1024px) 64vw, 620px",
+
+    wide:
+      "(max-width: 640px) 94vw, (max-width: 1024px) 90vw, 1080px",
+  };
 
   return (
     <div
-      ref={photoRef}
-      className="
+      className={`
         relative
 
         flex
-        min-h-[320px]
+
+        min-h-[260px]
+
         w-full
 
         items-center
@@ -56,108 +80,133 @@ export function StoryPhoto({
         overflow-hidden
 
         rounded-[24px]
-        sm:rounded-[30px]
-        md:rounded-[36px]
 
         border
-        border-white/15
+
+        ${
+          featured
+            ? "border-pink-100/25"
+            : "border-white/15"
+        }
 
         bg-black/10
 
-        shadow-[0_35px_100px_rgba(39,16,88,.28)]
+        ${
+          featured
+            ? "shadow-[0_35px_100px_rgba(45,18,90,.30)]"
+            : "shadow-[0_25px_70px_rgba(39,16,88,.20)]"
+        }
 
         ring-1
         ring-inset
         ring-white/10
-      "
+
+        sm:rounded-[30px]
+        md:rounded-[36px]
+      `}
     >
-      <motion.div
-        style={{
-          y,
-          scale,
-        }}
-        className="
-          relative
+      <Image
+        src={src}
+        alt={alt}
 
-          flex
-          w-full
+        width={
+          layout === "wide"
+            ? 1600
+            : 1200
+        }
 
-          items-center
-          justify-center
-        "
-      >
-        <Image
-          src={src}
-          alt={alt}
-          width={1600}
-          height={2000}
-          priority={priority}
-          sizes="
-            (max-width: 640px) 94vw,
-            (max-width: 1024px) 82vw,
-            820px
-          "
-          className="
-            block
+        height={
+          layout === "portrait"
+            ? 1800
+            : 1500
+        }
 
-            h-auto
-            max-h-[72vh]
-            w-auto
-            max-w-full
+        priority={priority}
 
-            object-contain
-          "
-        />
-      </motion.div>
+        loading={
+          priority
+            ? "eager"
+            : "lazy"
+        }
 
-      {/* Sombra inferior para facilitar la lectura */}
+        quality={
+          featured
+            ? 76
+            : 72
+        }
+
+        sizes={sizes[layout]}
+
+        className={`
+          block
+
+          h-auto
+
+          ${imageHeightClasses[layout]}
+
+          w-auto
+          max-w-full
+
+          object-contain
+
+          transition-transform
+          duration-700
+
+          md:hover:scale-[1.012]
+        `}
+      />
+
+      {/* Degradado inferior */}
+
       <div
+        aria-hidden="true"
         className="
           pointer-events-none
 
           absolute
           inset-0
 
-          z-10
-
           bg-gradient-to-t
 
-          from-black/30
+          from-black/20
           via-transparent
           to-white/5
         "
       />
 
-      {/* Halo central suave */}
-      <div
-        className="
-          pointer-events-none
+      {/* Luz especial */}
 
-          absolute
-          inset-0
+      {featured && (
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none
 
-          z-10
+            absolute
+            inset-0
 
-          bg-[radial-gradient(circle_at_center,rgba(255,255,255,.08),transparent_68%)]
-        "
-      />
+            bg-[radial-gradient(circle_at_center,rgba(255,220,245,.08),transparent_65%)]
+          "
+        />
+      )}
 
       {/* Borde interior */}
+
       <div
+        aria-hidden="true"
         className="
           pointer-events-none
 
           absolute
           inset-0
 
-          z-20
-
           rounded-[24px]
-          sm:rounded-[30px]
-          md:rounded-[36px]
 
           border
           border-white/10
+
+          sm:rounded-[30px]
+          md:rounded-[36px]
         "
       />
     </div>
