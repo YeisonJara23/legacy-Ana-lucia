@@ -1,10 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
-import type {
-  TimelinePhotoLayout,
-} from "@/components/timeline/types";
+import type { TimelinePhotoLayout } from "@/components/timeline/types";
 
 import { StoryCaption } from "./StoryCaption";
 import { StoryPhoto } from "./StoryPhoto";
@@ -22,6 +20,74 @@ type Props = {
   layout?: TimelinePhotoLayout;
 };
 
+/*
+ * =========================================================
+ * ANIMACIONES
+ * =========================================================
+ *
+ * La sección controla la entrada.
+ * Los elementos internos heredan el estado de animación,
+ * evitando añadir lógica de scroll adicional.
+ */
+
+const sectionVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 32,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+
+    transition: {
+      duration: 0.65,
+      ease: "easeOut",
+
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const photoVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 1.025,
+    y: 12,
+  },
+
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+
+    transition: {
+      duration: 0.85,
+      ease: "easeOut",
+    },
+  },
+};
+
+const captionVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+    scale: 0.97,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+
+    transition: {
+      duration: 0.65,
+      delay: 0.12,
+      ease: "easeOut",
+    },
+  },
+};
+
 export function StorySection({
   src,
   alt,
@@ -35,9 +101,9 @@ export function StorySection({
   layout = "center",
 }: Props) {
   /*
-   * ==========================================
-   * CONFIGURACIÓN EDITORIAL
-   * ==========================================
+   * =========================================================
+   * COMPOSICIÓN EDITORIAL
+   * =========================================================
    */
 
   const layoutClasses: Record<
@@ -80,7 +146,48 @@ export function StorySection({
     `,
   };
 
-  const textAlignmentClasses: Record<
+  /*
+   * Posición del texto sobre la fotografía.
+   */
+
+  const overlayPositionClasses: Record<
+    TimelinePhotoLayout,
+    string
+  > = {
+    center: `
+      left-1/2
+      -translate-x-1/2
+    `,
+
+    portrait: `
+      left-1/2
+      -translate-x-1/2
+    `,
+
+    wide: `
+      left-1/2
+      -translate-x-1/2
+    `,
+
+    left: `
+      left-1/2
+      -translate-x-1/2
+
+      md:left-5
+      md:translate-x-0
+    `,
+
+    right: `
+      left-1/2
+      -translate-x-1/2
+
+      md:left-auto
+      md:right-5
+      md:translate-x-0
+    `,
+  };
+
+  const overlayTextClasses: Record<
     TimelinePhotoLayout,
     string
   > = {
@@ -101,30 +208,36 @@ export function StorySection({
     `,
   };
 
+  const overlayWidthClasses: Record<
+    TimelinePhotoLayout,
+    string
+  > = {
+    center: "max-w-md",
+
+    portrait: "max-w-sm",
+
+    wide: "max-w-lg",
+
+    left: "max-w-md",
+
+    right: "max-w-md",
+  };
+
   /*
-   * ==========================================
+   * =========================================================
    * RECUERDO DESTACADO
-   * ==========================================
+   * =========================================================
    */
 
   if (featured) {
     return (
       <motion.section
-        initial={{
-          opacity: 0,
-          y: 35,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
         viewport={{
           once: true,
           amount: 0.08,
-        }}
-        transition={{
-          duration: 0.65,
-          ease: "easeOut",
         }}
         className="
           relative
@@ -145,11 +258,12 @@ export function StorySection({
           md:px-8
         "
       >
-        {/* ======================================
-            CABECERA
-        ====================================== */}
+        {/* =============================================
+            CABECERA DEL RECUERDO
+        ============================================= */}
 
-        <div
+        <motion.div
+          variants={captionVariants}
           className="
             mx-auto
 
@@ -162,8 +276,10 @@ export function StorySection({
           "
         >
           <div
+            aria-hidden="true"
             className="
               text-3xl
+
               text-pink-200
 
               drop-shadow-[0_0_20px_rgba(255,210,245,.7)]
@@ -218,6 +334,7 @@ export function StorySection({
           )}
 
           <div
+            aria-hidden="true"
             className="
               mx-auto
 
@@ -235,24 +352,21 @@ export function StorySection({
               sm:w-36
             "
           />
-        </div>
+        </motion.div>
 
-        {/* ======================================
+        {/* =============================================
             FOTO DESTACADA
-        ====================================== */}
+        ============================================= */}
 
-        <div
+        <motion.div
+          variants={photoVariants}
           className="
+            group/photo
             relative
-
-            rounded-[26px]
-
-            shadow-[0_35px_100px_rgba(49,20,100,.30)]
-
-            sm:rounded-[32px]
-            md:rounded-[40px]
           "
         >
+          {/* Luz exterior */}
+
           <div
             aria-hidden="true"
             className="
@@ -267,7 +381,14 @@ export function StorySection({
 
               bg-pink-300/10
 
+              opacity-70
+
               blur-[60px]
+
+              transition-opacity
+              duration-700
+
+              group-hover/photo:opacity-100
 
               md:-inset-10
               md:blur-[90px]
@@ -281,118 +402,164 @@ export function StorySection({
             featured
             layout="wide"
           />
-        </div>
 
-        {/* ======================================
-            TEXTO DESTACADO
-        ====================================== */}
+          {/* =========================================
+              TEXTO DESTACADO
+          ========================================= */}
 
-        {caption.trim() && (
-          <div
-            className="
-              relative
-
-              mx-auto
-
-              mt-8
-              max-w-3xl
-
-              overflow-hidden
-
-              rounded-[24px]
-
-              border
-              border-white/10
-
-              bg-white/[0.06]
-
-              px-6
-              py-7
-
-              text-center
-
-              backdrop-blur-md
-
-              sm:px-8
-
-              md:mt-10
-              md:px-12
-              md:py-9
-            "
-          >
-            <div
-              aria-hidden="true"
+          {caption.trim() && (
+            <motion.div
+              variants={captionVariants}
               className="
-                pointer-events-none
-
                 absolute
+
+                bottom-4
                 left-1/2
-                top-0
 
-                h-24
-                w-52
-
-                -translate-x-1/2
-                -translate-y-1/2
-
-                rounded-full
-
-                bg-pink-200/10
-
-                blur-3xl
-              "
-            />
-
-            <p
-              className="
-                relative
                 z-10
 
-                font-display
+                w-[calc(100%-1.25rem)]
+                max-w-2xl
 
-                text-xl
-                font-light
-                italic
+                -translate-x-1/2
 
-                leading-relaxed
+                sm:bottom-6
+                sm:w-[calc(100%-2rem)]
 
-                text-[#FFF2FB]
-
-                sm:text-2xl
-                md:text-[1.7rem]
+                md:bottom-8
               "
             >
-              “{caption}”
-            </p>
-          </div>
-        )}
+              <div
+                className="
+                  relative
+
+                  overflow-hidden
+
+                  rounded-[20px]
+
+                  border
+                  border-white/20
+
+                  bg-black/30
+
+                  px-4
+                  py-4
+
+                  text-center
+
+                  shadow-[0_18px_50px_rgba(0,0,0,.28)]
+
+                  backdrop-blur-xl
+
+                  transition-all
+                  duration-500
+
+                  group-hover/photo:border-pink-100/35
+                  group-hover/photo:bg-black/38
+
+                  group-hover/photo:shadow-[0_18px_55px_rgba(255,190,235,.12)]
+
+                  sm:px-5
+
+                  md:px-6
+                "
+              >
+                {/* Luz que aparece al hacer hover */}
+
+                <div
+                  aria-hidden="true"
+                  className="
+                    pointer-events-none
+
+                    absolute
+
+                    left-1/2
+                    top-full
+
+                    h-20
+                    w-52
+
+                    -translate-x-1/2
+
+                    rounded-full
+
+                    bg-pink-200/0
+
+                    blur-3xl
+
+                    transition-all
+                    duration-700
+
+                    group-hover/photo:top-1/2
+
+                    group-hover/photo:bg-pink-200/10
+                  "
+                />
+
+                <p
+                  className="
+                    relative
+                    z-10
+
+                    mb-2
+
+                    text-[9px]
+                    font-medium
+
+                    uppercase
+
+                    tracking-[0.3em]
+
+                    text-pink-100/65
+
+                    transition-colors
+                    duration-500
+
+                    group-hover/photo:text-pink-100/90
+                  "
+                >
+                  Un momento para recordar
+                </p>
+
+                <div
+                  className="
+                    relative
+                    z-10
+
+                    transition-all
+                    duration-500
+
+                    group-hover/photo:text-white
+
+                    md:group-hover/photo:-translate-y-[1px]
+                  "
+                >
+                  <StoryCaption size="featured">
+                    {caption}
+                  </StoryCaption>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
       </motion.section>
     );
   }
 
   /*
-   * ==========================================
+   * =========================================================
    * RECUERDO NORMAL
-   * ==========================================
+   * =========================================================
    */
 
   return (
     <motion.section
-      initial={{
-        opacity: 0,
-        y: 28,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
+      variants={sectionVariants}
+      initial="hidden"
+      whileInView="visible"
       viewport={{
         once: true,
         amount: 0.06,
-      }}
-      transition={{
-        duration: 0.55,
-        ease: "easeOut",
       }}
       className={`
         relative
@@ -412,15 +579,19 @@ export function StorySection({
         ${layoutClasses[layout]}
       `}
     >
-      {/* Pequeño marcador editorial */}
+      {/* =============================================
+          MARCADOR EDITORIAL
+      ============================================= */}
 
-      <div
+      <motion.div
+        variants={captionVariants}
         aria-hidden="true"
         className={`
           mb-5
 
           flex
           items-center
+
           gap-3
 
           ${
@@ -460,51 +631,130 @@ export function StorySection({
             bg-white/25
           "
         />
-      </div>
+      </motion.div>
 
-      {/* Fotografía */}
+      {/* =============================================
+          FOTO + TEXTO
+      ============================================= */}
 
-      <StoryPhoto
-        src={src}
-        alt={alt}
-        priority={priority}
-        layout={layout}
-      />
+      <motion.div
+        variants={photoVariants}
+        className="
+          group/photo
+          relative
+        "
+      >
+        <StoryPhoto
+          src={src}
+          alt={alt}
+          priority={priority}
+          layout={layout}
+        />
 
-      {/* Descripción */}
+        {caption.trim() && (
+          <motion.div
+            variants={captionVariants}
+            className={`
+              absolute
 
-      {caption.trim() && (
-        <div
-          className={`
-            mt-6
+              bottom-3
 
-            ${
-              layout === "portrait"
-                ? "mx-auto max-w-xl"
-                : "max-w-2xl"
-            }
+              z-10
 
-            ${
-              layout === "right"
-                ? "md:ml-auto"
-                : ""
-            }
+              w-[calc(100%-1rem)]
 
-            ${
-              layout === "center" ||
-              layout === "wide"
-                ? "mx-auto"
-                : ""
-            }
+              sm:bottom-4
+              sm:w-[calc(100%-1.5rem)]
 
-            ${textAlignmentClasses[layout]}
-          `}
-        >
-          <StoryCaption>
-            {caption}
-          </StoryCaption>
-        </div>
-      )}
+              md:bottom-5
+
+              ${overlayPositionClasses[layout]}
+              ${overlayWidthClasses[layout]}
+            `}
+          >
+            <div
+              className={`
+                relative
+
+                overflow-hidden
+
+                rounded-[18px]
+
+                border
+                border-white/15
+
+                bg-black/28
+
+                px-4
+                py-3
+
+                shadow-[0_14px_40px_rgba(0,0,0,.24)]
+
+                backdrop-blur-lg
+
+                transition-all
+                duration-500
+
+                group-hover/photo:border-pink-100/30
+
+                group-hover/photo:bg-black/36
+
+                group-hover/photo:shadow-[0_14px_45px_rgba(255,190,235,.10)]
+
+                ${overlayTextClasses[layout]}
+              `}
+            >
+              {/* Resplandor inferior */}
+
+              <div
+                aria-hidden="true"
+                className="
+                  pointer-events-none
+
+                  absolute
+
+                  bottom-[-60px]
+                  left-1/2
+
+                  h-24
+                  w-44
+
+                  -translate-x-1/2
+
+                  rounded-full
+
+                  bg-pink-200/0
+
+                  blur-3xl
+
+                  transition-all
+                  duration-700
+
+                  group-hover/photo:bottom-[-35px]
+
+                  group-hover/photo:bg-pink-200/[0.08]
+                "
+              />
+
+              <div
+                className="
+                  relative
+                  z-10
+
+                  transition-transform
+                  duration-500
+
+                  md:group-hover/photo:-translate-y-[1px]
+                "
+              >
+                <StoryCaption size="compact">
+                  {caption}
+                </StoryCaption>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
     </motion.section>
   );
 }

@@ -1,80 +1,50 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
-type Props = {
+type StoryCaptionProps = {
   children: ReactNode;
+  size?: "compact" | "featured";
 };
 
 export function StoryCaption({
   children,
-}: Props) {
+  size = "compact",
+}: StoryCaptionProps) {
+  const styles =
+    size === "featured"
+      ? `
+        text-base
+        leading-6
+
+        sm:text-lg
+        sm:leading-7
+
+        md:text-xl
+        md:leading-8
+      `
+      : `
+        text-sm
+        leading-5
+
+        sm:text-[15px]
+        sm:leading-6
+
+        md:text-base
+        md:leading-7
+      `;
+
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 40,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-      viewport={{
-        once: true,
-      }}
-      transition={{
-        duration: 0.9,
-      }}
-      className="
-        absolute
+    <p
+      className={`
+        ${styles}
 
-        bottom-5
-        left-1/2
+        font-light
+        italic
+        tracking-[0.01em]
 
-        z-30
-
-        w-[92%]
-        max-w-3xl
-
-        -translate-x-1/2
-
-        rounded-[30px]
-
-        border
-        border-white/15
-
-        bg-black/20
-
-        backdrop-blur-3xl
-
-        p-6
-        md:p-10
-
-        shadow-[0_40px_120px_rgba(0,0,0,.45)]
-      "
+        text-[#FFF8FD]
+      `}
     >
-      <p
-        className="
-          text-center
-
-          text-base
-          md:text-xl
-          lg:text-2xl
-
-          font-light
-
-          italic
-
-          leading-relaxed
-
-          tracking-wide
-
-          text-white
-        "
-      >
-        {children}
-      </p>
-    </motion.div>
+      {children}
+    </p>
   );
 }

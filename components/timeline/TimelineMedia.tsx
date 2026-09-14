@@ -1,6 +1,7 @@
 "use client";
 
 import { StoryBridge } from "@/components/story/StoryBridge";
+import { StoryPhotoGroup } from "@/components/story/StoryPhotoGroup";
 import { StorySection } from "@/components/story/StorySection";
 
 import { TimelineVideo } from "./TimelineVideo";
@@ -14,13 +15,6 @@ type TimelineMediaProps = {
   items: TimelineMediaItem[];
 };
 
-/**
- * Patrón editorial.
- *
- * No usa Math.random para evitar problemas
- * de hidratación y conseguir que el diseño
- * siempre sea consistente.
- */
 const photoLayoutPattern: TimelinePhotoLayout[] = [
   "center",
   "left",
@@ -46,8 +40,11 @@ export function TimelineMedia({
     <div
       className="
         relative
+
         mt-16
+
         bg-transparent
+
         md:mt-20
       "
     >
@@ -70,6 +67,21 @@ export function TimelineMedia({
 
         /*
          * ==========================================
+         * GRUPO DE FOTOGRAFÍAS
+         * ==========================================
+         */
+
+        if (item.type === "photoGroup") {
+          return (
+            <StoryPhotoGroup
+              key={`photo-group-${index}`}
+              group={item}
+            />
+          );
+        }
+
+        /*
+         * ==========================================
          * VIDEO
          * ==========================================
          */
@@ -82,7 +94,9 @@ export function TimelineMedia({
               key={item.src}
               className="
                 my-24
+
                 sm:my-28
+
                 md:my-36
               "
             >
@@ -99,7 +113,7 @@ export function TimelineMedia({
 
         /*
          * ==========================================
-         * FOTOGRAFÍA
+         * FOTOGRAFÍA NORMAL
          * ==========================================
          */
 

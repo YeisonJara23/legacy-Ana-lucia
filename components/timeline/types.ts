@@ -15,14 +15,25 @@ export type TimelinePhotoItem = {
   featured?: boolean;
   featuredTitle?: string;
 
-  /**
-   * Permite controlar manualmente la composición
-   * de una fotografía.
-   *
-   * Si no se especifica, TimelineMedia asignará
-   * una automáticamente.
-   */
   layout?: TimelinePhotoLayout;
+};
+
+export type TimelineGroupedPhoto = {
+  src: string;
+  alt: string;
+  caption: string;
+};
+
+export type TimelinePhotoGroupItem = {
+  type: "photoGroup";
+
+  eyebrow?: string;
+  title?: string;
+
+  photos: [
+    TimelineGroupedPhoto,
+    TimelineGroupedPhoto,
+  ];
 };
 
 export type TimelineVideoItem = {
@@ -44,6 +55,7 @@ export type TimelineBridgeItem = {
 
 export type TimelineMediaItem =
   | TimelinePhotoItem
+  | TimelinePhotoGroupItem
   | TimelineVideoItem
   | TimelineBridgeItem;
 

@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-import type {
-  TimelinePhotoLayout,
-} from "@/components/timeline/types";
+import type { TimelinePhotoLayout } from "@/components/timeline/types";
 
 type Props = {
   src: string;
@@ -23,44 +21,20 @@ export function StoryPhoto({
 
   layout = "center",
 }: Props) {
-  const imageHeightClasses: Record<
-    TimelinePhotoLayout,
-    string
-  > = {
-    center:
-      "max-h-[68vh]",
-
-    left:
-      "max-h-[70vh]",
-
-    right:
-      "max-h-[70vh]",
-
-    portrait:
-      "max-h-[78vh]",
-
-    wide:
-      "max-h-[76vh]",
+  const imageHeightClasses: Record<TimelinePhotoLayout, string> = {
+    center: "max-h-[68vh]",
+    left: "max-h-[70vh]",
+    right: "max-h-[70vh]",
+    portrait: "max-h-[78vh]",
+    wide: "max-h-[76vh]",
   };
 
-  const sizes: Record<
-    TimelinePhotoLayout,
-    string
-  > = {
-    center:
-      "(max-width: 640px) 92vw, (max-width: 1024px) 78vw, 760px",
-
-    left:
-      "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
-
-    right:
-      "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
-
-    portrait:
-      "(max-width: 640px) 88vw, (max-width: 1024px) 64vw, 620px",
-
-    wide:
-      "(max-width: 640px) 94vw, (max-width: 1024px) 90vw, 1080px",
+  const sizes: Record<TimelinePhotoLayout, string> = {
+    center: "(max-width: 640px) 92vw, (max-width: 1024px) 78vw, 760px",
+    left: "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
+    right: "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
+    portrait: "(max-width: 640px) 88vw, (max-width: 1024px) 64vw, 620px",
+    wide: "(max-width: 640px) 94vw, (max-width: 1024px) 90vw, 1080px",
   };
 
   return (
@@ -69,25 +43,17 @@ export function StoryPhoto({
         relative
 
         flex
-
         min-h-[260px]
-
         w-full
-
         items-center
         justify-center
 
         overflow-hidden
-
         rounded-[24px]
 
         border
 
-        ${
-          featured
-            ? "border-pink-100/25"
-            : "border-white/15"
-        }
+        ${featured ? "border-pink-100/25" : "border-white/15"}
 
         bg-black/10
 
@@ -108,56 +74,31 @@ export function StoryPhoto({
       <Image
         src={src}
         alt={alt}
-
-        width={
-          layout === "wide"
-            ? 1600
-            : 1200
-        }
-
-        height={
-          layout === "portrait"
-            ? 1800
-            : 1500
-        }
-
+        width={layout === "wide" ? 1600 : 1200}
+        height={layout === "portrait" ? 1800 : 1500}
         priority={priority}
-
-        loading={
-          priority
-            ? "eager"
-            : "lazy"
-        }
-
-        quality={
-          featured
-            ? 76
-            : 72
-        }
-
+        loading={priority ? "eager" : "lazy"}
+        quality={featured ? 76 : 72}
         sizes={sizes[layout]}
-
         className={`
           block
 
           h-auto
-
           ${imageHeightClasses[layout]}
-
           w-auto
           max-w-full
 
           object-contain
 
           transition-transform
-          duration-700
+duration-[1200ms]
+ease-out
 
-          md:hover:scale-[1.012]
+md:group-hover/photo:scale-[1.018]
         `}
       />
 
-      {/* Degradado inferior */}
-
+      {/* Degradado superior e inferior para que el texto resalte mejor */}
       <div
         aria-hidden="true"
         className="
@@ -168,13 +109,11 @@ export function StoryPhoto({
 
           bg-gradient-to-t
 
-          from-black/20
-          via-transparent
+          from-black/55
+          via-black/12
           to-white/5
         "
       />
-
-      {/* Luz especial */}
 
       {featured && (
         <div
@@ -189,8 +128,6 @@ export function StoryPhoto({
           "
         />
       )}
-
-      {/* Borde interior */}
 
       <div
         aria-hidden="true"

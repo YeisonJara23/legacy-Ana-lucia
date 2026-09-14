@@ -1,2 +1,11 @@
-export * from "./TimelineNavigation";
-export * from "./TimelineNavigationItem";
+export {
+  TimelineNavigation,
+} from "./TimelineNavigation";
+
+export {
+  TimelineNavigationItem,
+} from "./TimelineNavigationItem";
+
+export {
+  ReadingProgress,
+} from "./ReadingProgress";
