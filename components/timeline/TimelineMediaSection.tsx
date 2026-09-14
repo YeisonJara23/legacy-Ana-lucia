@@ -2,18 +2,27 @@
 
 import { motion } from "framer-motion";
 
+import { NextChapterTeaser } from "./NextChapterTeaser";
 import { TimelineMedia } from "./TimelineMedia";
+import { ChapterAtmosphere } from "./ChapterAtmosphere";
 
 import type {
   TimelineMediaSectionData,
 } from "./types";
 
+type NextSection = Pick<
+  TimelineMediaSectionData,
+  "id" | "chapter" | "title"
+>;
+
 type TimelineMediaSectionProps = {
   section: TimelineMediaSectionData;
+  nextSection?: NextSection;
 };
 
 export function TimelineMediaSection({
   section,
+  nextSection,
 }: TimelineMediaSectionProps) {
   const chapterNumber =
     section.chapter.match(/\d+/)?.[0] ?? "";
@@ -29,16 +38,23 @@ export function TimelineMediaSection({
         bg-transparent
       "
     >
+      <ChapterAtmosphere
+  theme={section.theme}
+/>
       {/* =====================================================
-          APERTURA CINEMATOGRÁFICA DEL CAPÍTULO
+          APERTURA DEL CAPÍTULO
       ===================================================== */}
 
       <div
         className="
           relative
+
           flex
+
           min-h-[72svh]
+
           w-full
+
           items-center
           justify-center
 
@@ -53,9 +69,7 @@ export function TimelineMediaSection({
           md:py-32
         "
       >
-        {/* -------------------------------------------------
-            NÚMERO GIGANTE DE FONDO
-        ------------------------------------------------- */}
+        {/* Número gigante */}
 
         {chapterNumber && (
           <motion.div
@@ -107,9 +121,7 @@ export function TimelineMediaSection({
           </motion.div>
         )}
 
-        {/* -------------------------------------------------
-            LUZ AMBIENTAL
-        ------------------------------------------------- */}
+        {/* Luz ambiental */}
 
         <div
           aria-hidden="true"
@@ -143,9 +155,7 @@ export function TimelineMediaSection({
           "
         />
 
-        {/* -------------------------------------------------
-            LÍNEA SUPERIOR
-        ------------------------------------------------- */}
+        {/* Línea superior */}
 
         <div
           aria-hidden="true"
@@ -170,9 +180,7 @@ export function TimelineMediaSection({
           "
         />
 
-        {/* -------------------------------------------------
-            CONTENIDO PRINCIPAL
-        ------------------------------------------------- */}
+        {/* Contenido */}
 
         <div
           className="
@@ -180,14 +188,13 @@ export function TimelineMediaSection({
             z-10
 
             mx-auto
+
             w-full
             max-w-5xl
 
             text-center
           "
         >
-          {/* Estrella */}
-
           <motion.div
             initial={{
               opacity: 0,
@@ -199,11 +206,9 @@ export function TimelineMediaSection({
             }}
             viewport={{
               once: true,
-              amount: 0.6,
             }}
             transition={{
               duration: 0.7,
-              ease: "easeOut",
             }}
             className="
               mx-auto
@@ -237,8 +242,6 @@ export function TimelineMediaSection({
             ✦
           </motion.div>
 
-          {/* Capítulo */}
-
           <motion.p
             initial={{
               opacity: 0,
@@ -254,7 +257,6 @@ export function TimelineMediaSection({
             transition={{
               duration: 0.65,
               delay: 0.08,
-              ease: "easeOut",
             }}
             className="
               mt-8
@@ -274,8 +276,6 @@ export function TimelineMediaSection({
             {section.chapter}
           </motion.p>
 
-          {/* Título */}
-
           <motion.h2
             initial={{
               opacity: 0,
@@ -291,18 +291,19 @@ export function TimelineMediaSection({
             transition={{
               duration: 0.8,
               delay: 0.14,
-              ease: "easeOut",
             }}
             className="
               mx-auto
 
               mt-5
+
               max-w-4xl
 
               font-display
 
               text-4xl
               font-light
+
               leading-[1.02]
 
               text-white
@@ -317,8 +318,6 @@ export function TimelineMediaSection({
           >
             {section.title}
           </motion.h2>
-
-          {/* Fecha */}
 
           {section.date && (
             <motion.p
@@ -336,7 +335,6 @@ export function TimelineMediaSection({
               transition={{
                 duration: 0.65,
                 delay: 0.2,
-                ease: "easeOut",
               }}
               className="
                 mt-7
@@ -357,8 +355,6 @@ export function TimelineMediaSection({
             </motion.p>
           )}
 
-          {/* Separador */}
-
           <motion.div
             initial={{
               opacity: 0,
@@ -374,7 +370,6 @@ export function TimelineMediaSection({
             transition={{
               duration: 0.8,
               delay: 0.24,
-              ease: "easeOut",
             }}
             className="
               mx-auto
@@ -396,8 +391,6 @@ export function TimelineMediaSection({
             "
           />
 
-          {/* Subtítulo */}
-
           {section.subtitle && (
             <motion.p
               initial={{
@@ -414,12 +407,12 @@ export function TimelineMediaSection({
               transition={{
                 duration: 0.75,
                 delay: 0.28,
-                ease: "easeOut",
               }}
               className="
                 mx-auto
 
                 mt-9
+
                 max-w-3xl
 
                 font-display
@@ -434,14 +427,11 @@ export function TimelineMediaSection({
 
                 sm:text-2xl
                 md:text-3xl
-                md:leading-relaxed
               "
             >
               {section.subtitle}
             </motion.p>
           )}
-
-          {/* Introducción */}
 
           {section.intro && (
             <motion.p
@@ -459,12 +449,12 @@ export function TimelineMediaSection({
               transition={{
                 duration: 0.75,
                 delay: 0.34,
-                ease: "easeOut",
               }}
               className="
                 mx-auto
 
                 mt-8
+
                 max-w-2xl
 
                 text-sm
@@ -485,10 +475,6 @@ export function TimelineMediaSection({
             </motion.p>
           )}
 
-          {/* -------------------------------------------------
-              INVITACIÓN A CONTINUAR
-          ------------------------------------------------- */}
-
           <motion.div
             initial={{
               opacity: 0,
@@ -505,6 +491,7 @@ export function TimelineMediaSection({
             }}
             className="
               mt-12
+
               flex
               flex-col
               items-center
@@ -549,15 +536,10 @@ export function TimelineMediaSection({
       </div>
 
       {/* =====================================================
-          RECUERDOS DEL CAPÍTULO
+          CONTENIDO DEL CAPÍTULO
       ===================================================== */}
 
-      <div
-        className="
-          relative
-          z-10
-        "
-      >
+      <div className="relative z-10">
         <TimelineMedia
           items={section.items}
         />
@@ -591,7 +573,6 @@ export function TimelineMediaSection({
             mx-auto
 
             mt-28
-            mb-20
 
             max-w-4xl
 
@@ -600,14 +581,10 @@ export function TimelineMediaSection({
             text-center
 
             sm:mt-36
-            sm:mb-28
 
             md:mt-44
-            md:mb-36
           "
         >
-          {/* Línea superior */}
-
           <div
             aria-hidden="true"
             className="
@@ -624,14 +601,13 @@ export function TimelineMediaSection({
             "
           />
 
-          {/* Estrella */}
-
           <div
             aria-hidden="true"
             className="
               mt-4
 
               text-2xl
+
               text-pink-200/75
 
               drop-shadow-[0_0_18px_rgba(255,210,245,.45)]
@@ -640,13 +616,12 @@ export function TimelineMediaSection({
             ✦
           </div>
 
-          {/* Frase */}
-
           <p
             className="
               mx-auto
 
               mt-8
+
               max-w-3xl
 
               font-display
@@ -668,8 +643,6 @@ export function TimelineMediaSection({
             {section.outro}
           </p>
 
-          {/* Indicador de cierre */}
-
           <p
             className="
               mt-8
@@ -688,8 +661,6 @@ export function TimelineMediaSection({
             Fin de {section.chapter}
           </p>
 
-          {/* Línea inferior que conduce al siguiente */}
-
           <div
             aria-hidden="true"
             className="
@@ -697,7 +668,7 @@ export function TimelineMediaSection({
 
               mt-8
 
-              h-20
+              h-16
               w-px
 
               bg-gradient-to-b
@@ -706,6 +677,121 @@ export function TimelineMediaSection({
               to-transparent
             "
           />
+        </motion.div>
+      )}
+
+      {/* =====================================================
+          SIGUIENTE CAPÍTULO
+      ===================================================== */}
+
+      {nextSection && (
+        <NextChapterTeaser
+          id={nextSection.id}
+          chapter={nextSection.chapter}
+          title={nextSection.title}
+        />
+      )}
+
+      {/* =====================================================
+          FINAL DE LA HISTORIA ACTUAL
+      ===================================================== */}
+
+      {!nextSection && (
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.5,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
+          className="
+            mx-auto
+
+            mb-32
+            mt-16
+
+            max-w-2xl
+
+            px-6
+
+            text-center
+
+            sm:mb-40
+          "
+        >
+          <div
+            className="
+              text-2xl
+              text-pink-200/70
+            "
+          >
+            ✦
+          </div>
+
+          <p
+            className="
+              mt-6
+
+              text-[9px]
+
+              uppercase
+
+              tracking-[0.35em]
+
+              text-white/35
+            "
+          >
+            Hasta aquí por ahora
+          </p>
+
+          <h3
+            className="
+              mt-5
+
+              font-display
+
+              text-3xl
+              font-light
+              italic
+
+              text-white
+
+              sm:text-4xl
+              md:text-5xl
+            "
+          >
+            La historia continúa…
+          </h3>
+
+          <p
+            className="
+              mx-auto
+
+              mt-5
+
+              max-w-lg
+
+              text-sm
+
+              leading-7
+
+              text-white/50
+
+              sm:text-base
+            "
+          >
+            Nuevos momentos seguirán
+            encontrando su lugar aquí.
+          </p>
         </motion.div>
       )}
     </section>

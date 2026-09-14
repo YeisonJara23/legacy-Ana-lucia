@@ -5,6 +5,13 @@ export type TimelinePhotoLayout =
   | "portrait"
   | "wide";
 
+export type TimelineChapterTheme =
+  | "rose"
+  | "lavender"
+  | "violet"
+  | "warm"
+  | "dream";
+
 export type TimelinePhotoItem = {
   type: "photo";
 
@@ -70,6 +77,8 @@ export type TimelineMediaSectionData = {
 
   intro?: string;
   outro?: string;
+
+  theme?: TimelineChapterTheme;
 
   items: TimelineMediaItem[];
 };

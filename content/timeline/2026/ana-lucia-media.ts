@@ -12,6 +12,8 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 01",
 
+    theme: "rose",
+
     title: "El día que llegaste",
 
     date: "23 de abril de 2026",
@@ -304,6 +306,8 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 02",
 
+    theme: "lavender",
+
     title: "Descubriendo el mundo",
 
     subtitle:
@@ -484,6 +488,8 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
     id: "03-videos-primeros-recuerdos",
 
     chapter: "Capítulo 03",
+
+    theme: "violet",
 
     title: "Recuerdos en movimiento",
 
