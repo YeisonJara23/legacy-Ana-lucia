@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -20,42 +21,137 @@ type TimelineVideoProps = {
 export function TimelineVideo({
   src,
   poster,
-
   title,
   caption,
-
   number,
 }: TimelineVideoProps) {
   const videoRef =
-    useRef<HTMLVideoElement>(null);
+    useRef<HTMLVideoElement | null>(
+      null
+    );
 
   const [hasStarted, setHasStarted] =
     useState(false);
 
-  const handlePlay = async () => {
-    const video = videoRef.current;
+  const [isPlaying, setIsPlaying] =
+    useState(false);
 
-    if (!video) return;
+  /* =========================================================
+     AVISAR QUE EL VIDEO EMPEZÓ
+  ========================================================= */
 
-    try {
-      await video.play();
-
-      setHasStarted(true);
-    } catch {
-      /*
-       * Si el navegador bloquea la reproducción,
-       * simplemente dejamos disponibles los
-       * controles nativos.
-       */
-      setHasStarted(true);
-    }
+  const notifyVideoPlay = () => {
+    window.dispatchEvent(
+      new CustomEvent(
+        "ana-lucia:video-play",
+        {
+          detail: {
+            src,
+          },
+        }
+      )
+    );
   };
+
+  /* =========================================================
+     AVISAR QUE EL VIDEO SE DETUVO
+  ========================================================= */
+
+  const notifyVideoStop = () => {
+    window.dispatchEvent(
+      new CustomEvent(
+        "ana-lucia:video-stop",
+        {
+          detail: {
+            src,
+          },
+        }
+      )
+    );
+  };
+
+  /* =========================================================
+     PLAY DESDE BOTÓN PERSONALIZADO
+  ========================================================= */
+
+  const handleStart =
+    async () => {
+      const video =
+        videoRef.current;
+
+      if (!video) {
+        return;
+      }
+
+      try {
+        /*
+         * Pausamos cualquier otro video
+         * de la historia que esté reproduciéndose.
+         */
+
+        document
+          .querySelectorAll<HTMLVideoElement>(
+            'video[data-story-video="true"]'
+          )
+          .forEach(
+            (otherVideo) => {
+              if (
+                otherVideo !==
+                  video &&
+                !otherVideo.paused
+              ) {
+                otherVideo.pause();
+              }
+            }
+          );
+
+        await video.play();
+
+        setHasStarted(true);
+      } catch (error) {
+        console.error(
+          "No se pudo reproducir el video:",
+          error
+        );
+      }
+    };
+
+  /* =========================================================
+     SI EL COMPONENTE DESAPARECE MIENTRAS EL VIDEO SUENA
+  ========================================================= */
+
+  useEffect(() => {
+    return () => {
+      const video =
+        videoRef.current;
+
+      if (
+        video &&
+        !video.paused
+      ) {
+        window.dispatchEvent(
+          new CustomEvent(
+            "ana-lucia:video-stop",
+            {
+              detail: {
+                src,
+              },
+            }
+          )
+        );
+      }
+    };
+  }, [src]);
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
     <motion.figure
       initial={{
         opacity: 0,
-        y: 35,
+        y: 28,
       }}
       whileInView={{
         opacity: 1,
@@ -78,24 +174,29 @@ export function TimelineVideo({
         max-w-5xl
 
         px-3
+
         sm:px-5
         md:px-8
       "
     >
-      {/* ===============================================
+      {/* =====================================================
           CABECERA
-      =============================================== */}
+      ===================================================== */}
 
       <div
         className="
           mx-auto
 
-          mb-8
-          md:mb-10
+          mb-6
 
-          max-w-3xl
+          flex
+          max-w-4xl
 
-          text-center
+          items-center
+
+          gap-4
+
+          sm:mb-8
         "
       >
         {/* Número */}
@@ -103,11 +204,10 @@ export function TimelineVideo({
         {number !== undefined && (
           <div
             className="
-              mx-auto
-
               flex
-              h-9
-              w-9
+              h-10
+              w-10
+              shrink-0
 
               items-center
               justify-center
@@ -117,403 +217,443 @@ export function TimelineVideo({
               border
               border-pink-100/20
 
-              bg-white/[0.05]
+              bg-white/[0.04]
 
-              text-[10px]
-              font-medium
+              font-display
 
-              tracking-[0.15em]
+              text-sm
 
-              text-pink-100/70
+              text-pink-100/75
 
-              backdrop-blur-sm
+              shadow-[0_0_25px_rgba(255,210,245,.10)]
 
-              sm:h-10
-              sm:w-10
+              backdrop-blur-lg
+
+              sm:h-12
+              sm:w-12
+              sm:text-base
             "
           >
-            {String(number).padStart(
+            {String(
+              number
+            ).padStart(
               2,
               "0"
             )}
           </div>
         )}
 
-        {/* Tipo */}
-
-        <p
-          className="
-            mt-5
-
-            text-[10px]
-            font-medium
-
-            uppercase
-
-            tracking-[0.38em]
-
-            text-pink-100/60
-
-            sm:text-xs
-          "
-        >
-          Recuerdo en movimiento
-        </p>
-
         {/* Título */}
 
-        <h3
-          className="
-            mx-auto
+        <div className="min-w-0">
+          <p
+            className="
+              text-[8px]
+              font-medium
 
-            mt-4
+              uppercase
 
-            font-display
+              tracking-[0.3em]
 
-            text-3xl
-            font-light
-            leading-tight
+              text-pink-100/50
 
-            text-white
+              sm:text-[9px]
+            "
+          >
+            Recuerdo en movimiento
+          </p>
 
-            sm:text-4xl
-            md:text-5xl
-          "
-        >
-          {title}
-        </h3>
+          <h3
+            className="
+              mt-1.5
 
-        {/* Línea */}
+              font-display
 
-        <div
-          aria-hidden="true"
-          className="
-            mx-auto
+              text-xl
+              font-light
 
-            mt-6
+              text-white
 
-            h-px
-            w-20
-
-            bg-gradient-to-r
-
-            from-transparent
-            via-pink-100/60
-            to-transparent
-
-            sm:w-28
-          "
-        />
+              sm:text-2xl
+              md:text-3xl
+            "
+          >
+            {title}
+          </h3>
+        </div>
       </div>
 
-      {/* ===============================================
+      {/* =====================================================
           VIDEO
-      =============================================== */}
+      ===================================================== */}
 
       <div
         className="
-          group
+          group/video
+
           relative
+
+          mx-auto
+
+          max-w-4xl
 
           overflow-hidden
 
-          rounded-[26px]
-          sm:rounded-[32px]
-          md:rounded-[40px]
+          rounded-[24px]
 
           border
           border-white/15
 
-          bg-black/25
+          bg-black/20
 
-          shadow-[0_35px_100px_rgba(36,12,76,.35)]
+          shadow-[0_28px_80px_rgba(37,15,78,.25)]
 
           ring-1
           ring-inset
           ring-white/10
+
+          sm:rounded-[30px]
+
+          md:rounded-[36px]
         "
       >
-        {/* Glow exterior */}
+        {/* Relación visual */}
 
-        <div
-          aria-hidden="true"
-          className="
-            pointer-events-none
-
-            absolute
-            left-1/2
-            top-1/2
-
-            -z-10
-
-            h-[80%]
-            w-[85%]
-
-            -translate-x-1/2
-            -translate-y-1/2
-
-            rounded-full
-
-            bg-pink-300/10
-
-            blur-[80px]
-          "
-        />
-
-        {/* Video */}
-
-        <video
-          ref={videoRef}
-
-          playsInline
-
-          preload="none"
-
-          poster={poster}
-
-          controls={hasStarted}
-
-          aria-label={title}
-
-          onPlay={() =>
-            setHasStarted(true)
-          }
-
-          className="
-            block
-
-            max-h-[78vh]
-
-            w-full
-
-            bg-black/25
-
-            object-contain
-          "
-        >
-          <source
-            src={src}
-            type="video/mp4"
-          />
-
-          Tu navegador no puede reproducir
-          este video.
-        </video>
-
-        {/* =============================================
-            PORTADA PERSONALIZADA
-        ============================================= */}
-
-        {!hasStarted && (
-          <div
-            className="
-              absolute
-              inset-0
-
-              flex
-              items-center
-              justify-center
-            "
-          >
-            {/* Oscurecimiento */}
-
-            <div
-              aria-hidden="true"
-              className="
-                pointer-events-none
-
-                absolute
-                inset-0
-
-                bg-gradient-to-t
-
-                from-black/55
-                via-black/10
-                to-black/15
-              "
-            />
-
-            {/* Luz detrás del botón */}
-
-            <div
-              aria-hidden="true"
-              className="
-                pointer-events-none
-
-                absolute
-                left-1/2
-                top-1/2
-
-                h-40
-                w-40
-
-                -translate-x-1/2
-                -translate-y-1/2
-
-                rounded-full
-
-                bg-pink-200/15
-
-                blur-[55px]
-              "
-            />
-
-            {/* Botón */}
-
-            <button
-              type="button"
-
-              onClick={handlePlay}
-
-              aria-label={`Reproducir ${title}`}
-
-              className="
-                relative
-                z-10
-
-                flex
-                h-20
-                w-20
-
-                cursor-pointer
-
-                items-center
-                justify-center
-
-                rounded-full
-
-                border
-                border-white/30
-
-                bg-white/10
-
-                shadow-[0_0_45px_rgba(255,215,245,.25)]
-
-                backdrop-blur-md
-
-                transition
-
-                duration-300
-
-                hover:scale-105
-                hover:bg-white/15
-
-                focus-visible:outline-none
-                focus-visible:ring-2
-                focus-visible:ring-pink-100
-
-                sm:h-24
-                sm:w-24
-              "
-            >
-              {/* Triángulo play */}
-
-              <span
-                aria-hidden="true"
-                className="
-                  ml-1
-
-                  block
-
-                  h-0
-                  w-0
-
-                  border-y-[10px]
-                  border-y-transparent
-
-                  border-l-[16px]
-                  border-l-white
-
-                  drop-shadow-[0_0_12px_rgba(255,255,255,.5)]
-
-                  sm:border-y-[12px]
-                  sm:border-l-[19px]
-                "
-              />
-            </button>
-
-            {/* Texto inferior */}
-
-            <div
-              className="
-                pointer-events-none
-
-                absolute
-                bottom-6
-                left-1/2
-
-                w-full
-                max-w-md
-
-                -translate-x-1/2
-
-                px-5
-
-                text-center
-
-                sm:bottom-8
-              "
-            >
-              <p
-                className="
-                  text-[9px]
-
-                  uppercase
-
-                  tracking-[0.32em]
-
-                  text-white/65
-
-                  sm:text-[10px]
-                "
-              >
-                Toca para revivir este
-                momento
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Borde interior */}
-
-        <div
-          aria-hidden="true"
-          className="
-            pointer-events-none
-
-            absolute
-            inset-0
-
-            rounded-[26px]
-            sm:rounded-[32px]
-            md:rounded-[40px]
-
-            ring-1
-            ring-inset
-            ring-white/10
-          "
-        />
-      </div>
-
-      {/* ===============================================
-          DESCRIPCIÓN
-      =============================================== */}
-
-      {caption.trim() && (
         <div
           className="
             relative
 
+            aspect-video
+
+            w-full
+          "
+        >
+          <video
+            ref={videoRef}
+            data-story-video="true"
+
+            src={src}
+            poster={poster}
+
+            playsInline
+
+            preload="none"
+
+            controls={
+              hasStarted
+            }
+
+            onPlay={() => {
+              /*
+               * Si se inició desde los controles
+               * nativos también funciona.
+               */
+
+              setHasStarted(
+                true
+              );
+
+              setIsPlaying(
+                true
+              );
+
+              /*
+               * Pausar cualquier otro video.
+               */
+
+              document
+                .querySelectorAll<HTMLVideoElement>(
+                  'video[data-story-video="true"]'
+                )
+                .forEach(
+                  (
+                    otherVideo
+                  ) => {
+                    if (
+                      otherVideo !==
+                        videoRef.current &&
+                      !otherVideo.paused
+                    ) {
+                      otherVideo.pause();
+                    }
+                  }
+                );
+
+              notifyVideoPlay();
+            }}
+
+            onPause={() => {
+              setIsPlaying(
+                false
+              );
+
+              notifyVideoStop();
+            }}
+
+            onEnded={() => {
+              setIsPlaying(
+                false
+              );
+
+              notifyVideoStop();
+            }}
+
+            className="
+              h-full
+              w-full
+
+              object-contain
+
+              bg-black/10
+            "
+          />
+
+          {/* =============================================
+              PORTADA PERSONALIZADA
+          ============================================= */}
+
+          {!hasStarted && (
+            <button
+              type="button"
+
+              onClick={
+                handleStart
+              }
+
+              aria-label={`Reproducir ${title}`}
+
+              className="
+                absolute
+                inset-0
+
+                z-10
+
+                flex
+
+                items-center
+                justify-center
+
+                overflow-hidden
+
+                focus:outline-none
+
+                focus-visible:ring-2
+                focus-visible:ring-inset
+                focus-visible:ring-pink-100/60
+              "
+            >
+              {/* Degradado */}
+
+              <div
+                aria-hidden="true"
+                className="
+                  absolute
+                  inset-0
+
+                  bg-gradient-to-t
+
+                  from-black/55
+                  via-black/10
+                  to-black/5
+                "
+              />
+
+              {/* Glow */}
+
+              <div
+                aria-hidden="true"
+                className="
+                  pointer-events-none
+
+                  absolute
+                  left-1/2
+                  top-1/2
+
+                  h-44
+                  w-44
+
+                  -translate-x-1/2
+                  -translate-y-1/2
+
+                  rounded-full
+
+                  bg-pink-200/[0.08]
+
+                  blur-[60px]
+
+                  transition-all
+                  duration-700
+
+                  group-hover/video:bg-pink-200/[0.13]
+
+                  sm:h-56
+                  sm:w-56
+                "
+              />
+
+              {/* Botón */}
+
+              <div
+                className="
+                  relative
+                  z-10
+
+                  flex
+                  flex-col
+
+                  items-center
+                  justify-center
+                "
+              >
+                <motion.div
+                  whileHover={{
+                    scale: 1.06,
+                  }}
+                  whileTap={{
+                    scale: 0.94,
+                  }}
+                  className="
+                    flex
+                    h-16
+                    w-16
+
+                    items-center
+                    justify-center
+
+                    rounded-full
+
+                    border
+                    border-white/25
+
+                    bg-[#6f4bc0]/70
+
+                    text-white
+
+                    shadow-[0_12px_45px_rgba(35,13,75,.30)]
+
+                    backdrop-blur-xl
+
+                    transition-colors
+                    duration-300
+
+                    group-hover/video:border-pink-100/40
+                    group-hover/video:bg-[#7957c8]/80
+
+                    sm:h-20
+                    sm:w-20
+                  "
+                >
+                  <span
+                    aria-hidden="true"
+                    className="
+                      ml-1
+
+                      text-2xl
+
+                      sm:text-3xl
+                    "
+                  >
+                    ▶
+                  </span>
+                </motion.div>
+
+                <p
+                  className="
+                    mt-5
+
+                    text-[8px]
+                    font-medium
+
+                    uppercase
+
+                    tracking-[0.3em]
+
+                    text-white/65
+
+                    sm:text-[9px]
+                  "
+                >
+                  Toca para revivir
+                  este momento
+                </p>
+              </div>
+            </button>
+          )}
+
+          {/* Indicador cuando está reproduciendo */}
+
+          {isPlaying && (
+            <div
+              aria-hidden="true"
+              className="
+                pointer-events-none
+
+                absolute
+                left-4
+                top-4
+
+                z-20
+
+                rounded-full
+
+                border
+                border-white/10
+
+                bg-black/25
+
+                px-3
+                py-1.5
+
+                text-[8px]
+
+                uppercase
+
+                tracking-[0.2em]
+
+                text-white/55
+
+                backdrop-blur-lg
+              "
+            >
+              Reproduciendo
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* =====================================================
+          DESCRIPCIÓN
+      ===================================================== */}
+
+      {caption.trim() && (
+        <motion.figcaption
+          initial={{
+            opacity: 0,
+            y: 14,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.3,
+          }}
+          transition={{
+            duration: 0.6,
+            delay: 0.08,
+          }}
+          className="
             mx-auto
 
-            mt-7
-            md:mt-9
-
+            mt-5
             max-w-3xl
 
-            px-4
+            px-3
 
             text-center
+
+            sm:mt-6
           "
         >
           <div
@@ -521,35 +661,40 @@ export function TimelineVideo({
             className="
               mx-auto
 
-              mb-6
+              mb-4
 
-              text-lg
+              h-px
+              w-12
 
-              text-pink-200/55
+              bg-gradient-to-r
+
+              from-transparent
+              via-pink-100/40
+              to-transparent
             "
-          >
-            ✦
-          </div>
+          />
 
-          <figcaption
+          <p
             className="
               font-display
 
-              text-xl
+              text-base
               font-light
               italic
 
-              leading-relaxed
+              leading-7
 
-              text-[#FFF0FB]
+              text-[#FFF0FA]/85
 
-              sm:text-2xl
-              md:text-[1.65rem]
+              sm:text-lg
+              sm:leading-8
+
+              md:text-xl
             "
           >
             “{caption}”
-          </figcaption>
-        </div>
+          </p>
+        </motion.figcaption>
       )}
     </motion.figure>
   );

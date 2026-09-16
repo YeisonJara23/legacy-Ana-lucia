@@ -14,14 +14,11 @@ export type TimelineChapterTheme =
 
 export type TimelinePhotoItem = {
   type: "photo";
-
   src: string;
   alt: string;
   caption: string;
-
   featured?: boolean;
   featuredTitle?: string;
-
   layout?: TimelinePhotoLayout;
 };
 
@@ -33,10 +30,8 @@ export type TimelineGroupedPhoto = {
 
 export type TimelinePhotoGroupItem = {
   type: "photoGroup";
-
   eyebrow?: string;
   title?: string;
-
   photos: [
     TimelineGroupedPhoto,
     TimelineGroupedPhoto,
@@ -45,17 +40,14 @@ export type TimelinePhotoGroupItem = {
 
 export type TimelineVideoItem = {
   type: "video";
-
   src: string;
   poster: string;
-
   alt: string;
   caption: string;
 };
 
 export type TimelineBridgeItem = {
   type: "bridge";
-
   eyebrow?: string;
   text: string;
 };
@@ -68,12 +60,18 @@ export type TimelineMediaItem =
 
 export type TimelineMediaSectionData = {
   id: string;
-
   chapter: string;
   title: string;
 
   subtitle?: string;
   date?: string;
+
+  /*
+   * Momento de vida:
+   * Nacimiento, Primeros días,
+   * 1 mes, 2 meses, etc.
+   */
+  ageLabel?: string;
 
   intro?: string;
   outro?: string;

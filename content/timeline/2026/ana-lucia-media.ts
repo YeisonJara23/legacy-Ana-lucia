@@ -12,6 +12,8 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 01",
 
+    ageLabel: "Nacimiento",
+
     theme: "rose",
 
     title: "El día que llegaste",
@@ -306,6 +308,8 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 02",
 
+    ageLabel: "Primeros días",
+
     theme: "lavender",
 
     title: "Descubriendo el mundo",
@@ -489,6 +493,8 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 03",
 
+    ageLabel: "Primeros recuerdos",
+
     theme: "violet",
 
     title: "Recuerdos en movimiento",
@@ -593,6 +599,10 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 04",
 
+    ageLabel: "1 mes",
+
+    theme: "warm",
+
     title: "Nuestro primer mes contigo",
 
     subtitle:
@@ -692,7 +702,11 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
 
     chapter: "Capítulo 05",
 
+    ageLabel: "2 meses",
+
     title: "Cada día, algo nuevo",
+
+    theme: "dream",
 
     subtitle:
       "Una mirada distinta. Una sonrisa inesperada. Otro pequeño descubrimiento.",
@@ -1012,21 +1026,7 @@ export const anaLuciaMedia: TimelineMediaSectionData[] = [
       // PAPÁ
       // -----------------------------------------------------
 
-      {
-        type: "photo",
-
-        src: "/media/timeline/2026/05-segundo-mes-y-crecimiento/photos/058-con-papa.webp",
-
-        alt: "Ana Lucía con papá",
-
-        caption:
-          "Con papá quedó guardado otro de esos momentos que algún día podrán mirar juntos y volver a recordar.",
-
-        featured: true,
-
-        featuredTitle: "Momentos con papá",
-      },
-
+      
       {
         type: "photo",
 

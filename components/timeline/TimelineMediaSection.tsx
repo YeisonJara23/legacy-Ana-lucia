@@ -2,14 +2,20 @@
 
 import { motion } from "framer-motion";
 
-import { NextChapterTeaser } from "./NextChapterTeaser";
-import { TimelineMedia } from "./TimelineMedia";
-import { ChapterAtmosphere } from "./ChapterAtmosphere";
 import { StoryEnding } from "@/components/story/StoryEnding";
+
+import { ChapterAtmosphere } from "./ChapterAtmosphere";
+import { NextChapterTeaser } from "./NextChapterTeaser";
+import { TimelineAgeMilestone } from "./TimelineAgeMilestone";
+import { TimelineMedia } from "./TimelineMedia";
 
 import type {
   TimelineMediaSectionData,
 } from "./types";
+
+/* =========================================================
+   TYPES
+========================================================= */
 
 type NextSection = Pick<
   TimelineMediaSectionData,
@@ -21,10 +27,19 @@ type TimelineMediaSectionProps = {
   nextSection?: NextSection;
 };
 
+/* =========================================================
+   COMPONENT
+========================================================= */
+
 export function TimelineMediaSection({
   section,
   nextSection,
 }: TimelineMediaSectionProps) {
+  /*
+   * Extraemos solamente el número:
+   *
+   * "Capítulo 01" → "01"
+   */
   const chapterNumber =
     section.chapter.match(/\d+/)?.[0] ?? "";
 
@@ -39,9 +54,17 @@ export function TimelineMediaSection({
         bg-transparent
       "
     >
+      {/* =====================================================
+          ATMÓSFERA DEL CAPÍTULO
+
+          Cada capítulo utiliza su propia atmósfera:
+          rose, lavender, violet, warm o dream.
+      ===================================================== */}
+
       <ChapterAtmosphere
-  theme={section.theme}
-/>
+        theme={section.theme}
+      />
+
       {/* =====================================================
           APERTURA DEL CAPÍTULO
       ===================================================== */}
@@ -70,7 +93,9 @@ export function TimelineMediaSection({
           md:py-24
         "
       >
-        {/* Número gigante */}
+        {/* =================================================
+            NÚMERO GIGANTE DEL CAPÍTULO
+        ================================================= */}
 
         {chapterNumber && (
           <motion.div
@@ -114,7 +139,9 @@ export function TimelineMediaSection({
               text-white/[0.045]
 
               sm:text-[13rem]
+
               md:text-[18rem]
+
               lg:text-[22rem]
             "
           >
@@ -122,41 +149,11 @@ export function TimelineMediaSection({
           </motion.div>
         )}
 
-        {/* Luz ambiental */}
+        {/* =================================================
+            LÍNEA SUPERIOR
 
-        <div
-          aria-hidden="true"
-          className="
-            pointer-events-none
-
-            absolute
-            left-1/2
-            top-1/2
-
-            -z-20
-
-            h-[320px]
-            w-[320px]
-
-            -translate-x-1/2
-            -translate-y-1/2
-
-            rounded-full
-
-            bg-pink-300/[0.08]
-
-            blur-[110px]
-
-            sm:h-[420px]
-            sm:w-[420px]
-
-            md:h-[520px]
-            md:w-[520px]
-            md:blur-[150px]
-          "
-        />
-
-        {/* Línea superior */}
+            Conecta visualmente un capítulo con el anterior.
+        ================================================= */}
 
         <div
           aria-hidden="true"
@@ -165,7 +162,7 @@ export function TimelineMediaSection({
             left-1/2
             top-0
 
-            h-24
+            h-20
             w-px
 
             -translate-x-1/2
@@ -174,14 +171,17 @@ export function TimelineMediaSection({
 
             from-transparent
             via-white/15
-            to-pink-100/50
+            to-pink-100/45
 
-            sm:h-28
-            md:h-32
+            sm:h-24
+
+            md:h-28
           "
         />
 
-        {/* Contenido */}
+        {/* =================================================
+            CONTENIDO DEL ENCABEZADO
+        ================================================= */}
 
         <div
           className="
@@ -196,52 +196,78 @@ export function TimelineMediaSection({
             text-center
           "
         >
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.6,
-            }}
-            whileInView={{
-              opacity: 1,
-              scale: 1,
-            }}
-            viewport={{
-              once: true,
-            }}
-            transition={{
-              duration: 0.7,
-            }}
-            className="
-              mx-auto
+          {/* =============================================
+              MOMENTO DE VIDA / EDAD
 
-              flex
-              h-12
-              w-12
+              Ejemplos:
+              Nacimiento
+              Primeros días
+              1 mes
+              2 meses
+          ============================================= */}
 
-              items-center
-              justify-center
+          {section.ageLabel ? (
+            <TimelineAgeMilestone
+              age={section.ageLabel}
+              date={section.date}
+            />
+          ) : (
+            /*
+             * Fallback:
+             * si un capítulo futuro no tiene ageLabel,
+             * conservamos la estrella clásica.
+             */
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.6,
+              }}
+              whileInView={{
+                opacity: 1,
+                scale: 1,
+              }}
+              viewport={{
+                once: true,
+              }}
+              transition={{
+                duration: 0.7,
+              }}
+              className="
+                mx-auto
 
-              rounded-full
+                flex
+                h-12
+                w-12
 
-              border
-              border-pink-100/20
+                items-center
+                justify-center
 
-              bg-white/[0.04]
+                rounded-full
 
-              text-2xl
-              text-pink-200
+                border
+                border-pink-100/20
 
-              shadow-[0_0_35px_rgba(255,210,245,.15)]
+                bg-white/[0.04]
 
-              backdrop-blur-sm
+                text-2xl
+                text-pink-200
 
-              sm:h-14
-              sm:w-14
-              sm:text-3xl
-            "
-          >
-            ✦
-          </motion.div>
+                shadow-[0_0_35px_rgba(255,210,245,.15)]
+
+                backdrop-blur-sm
+
+                sm:h-14
+                sm:w-14
+                sm:text-3xl
+              "
+            >
+              ✦
+            </motion.div>
+          )}
+
+          {/* =============================================
+              CAPÍTULO
+          ============================================= */}
 
           <motion.p
             initial={{
@@ -259,9 +285,7 @@ export function TimelineMediaSection({
               duration: 0.65,
               delay: 0.08,
             }}
-            className="
-              mt-8
-
+            className={`
               text-[10px]
               font-medium
 
@@ -272,10 +296,20 @@ export function TimelineMediaSection({
               text-pink-100/65
 
               sm:text-xs
-            "
+
+              ${
+                section.ageLabel
+                  ? "mt-2"
+                  : "mt-8"
+              }
+            `}
           >
             {section.chapter}
           </motion.p>
+
+          {/* =============================================
+              TÍTULO
+          ============================================= */}
 
           <motion.h2
             initial={{
@@ -312,49 +346,68 @@ export function TimelineMediaSection({
               drop-shadow-[0_0_30px_rgba(255,215,245,.2)]
 
               sm:text-5xl
+
               md:text-6xl
+
               lg:text-7xl
+
               xl:text-8xl
             "
           >
             {section.title}
           </motion.h2>
 
-          {section.date && (
-            <motion.p
-              initial={{
-                opacity: 0,
-                y: 15,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: 0.65,
-                delay: 0.2,
-              }}
-              className="
-                mt-7
+          {/* =============================================
+              FECHA FALLBACK
 
-                text-[10px]
+              La fecha normalmente ya aparece dentro de
+              TimelineAgeMilestone.
 
-                uppercase
+              Solo la mostramos aquí si ese capítulo no
+              tiene ageLabel.
+          ============================================= */}
 
-                tracking-[0.3em]
+          {!section.ageLabel &&
+            section.date && (
+              <motion.p
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.65,
+                  delay: 0.2,
+                }}
+                className="
+                  mt-6
 
-                text-white/45
+                  text-[10px]
 
-                sm:text-xs
-                md:text-sm
-              "
-            >
-              {section.date}
-            </motion.p>
-          )}
+                  uppercase
+
+                  tracking-[0.3em]
+
+                  text-white/45
+
+                  sm:text-xs
+
+                  md:text-sm
+                "
+              >
+                {section.date}
+              </motion.p>
+            )}
+
+          {/* =============================================
+              SEPARADOR
+          ============================================= */}
 
           <motion.div
             initial={{
@@ -375,7 +428,7 @@ export function TimelineMediaSection({
             className="
               mx-auto
 
-              mt-9
+              mt-8
 
               h-px
               w-28
@@ -391,6 +444,10 @@ export function TimelineMediaSection({
               sm:w-40
             "
           />
+
+          {/* =============================================
+              SUBTÍTULO
+          ============================================= */}
 
           {section.subtitle && (
             <motion.p
@@ -412,7 +469,7 @@ export function TimelineMediaSection({
               className="
                 mx-auto
 
-                mt-9
+                mt-8
 
                 max-w-3xl
 
@@ -427,12 +484,17 @@ export function TimelineMediaSection({
                 text-[#FFE9FA]
 
                 sm:text-2xl
+
                 md:text-3xl
               "
             >
               {section.subtitle}
             </motion.p>
           )}
+
+          {/* =============================================
+              INTRODUCCIÓN
+          ============================================= */}
 
           {section.intro && (
             <motion.p
@@ -454,7 +516,7 @@ export function TimelineMediaSection({
               className="
                 mx-auto
 
-                mt-8
+                mt-7
 
                 max-w-2xl
 
@@ -476,12 +538,18 @@ export function TimelineMediaSection({
             </motion.p>
           )}
 
+          {/* =============================================
+              CONTINÚA LA HISTORIA
+          ============================================= */}
+
           <motion.div
             initial={{
               opacity: 0,
+              y: 10,
             }}
             whileInView={{
               opacity: 1,
+              y: 0,
             }}
             viewport={{
               once: true,
@@ -519,7 +587,7 @@ export function TimelineMediaSection({
             <div
               aria-hidden="true"
               className="
-                mt-5
+                mt-4
 
                 h-8
                 w-px
@@ -537,10 +605,21 @@ export function TimelineMediaSection({
       </div>
 
       {/* =====================================================
-          CONTENIDO DEL CAPÍTULO
+          FOTOGRAFÍAS / VIDEOS / GRUPOS / PUENTES
       ===================================================== */}
 
-      <div className="relative z-10">
+      <div
+        className="
+          relative
+          z-10
+
+          mt-4
+
+          sm:mt-6
+
+          md:mt-8
+        "
+      >
         <TimelineMedia
           items={section.items}
         />
@@ -562,7 +641,7 @@ export function TimelineMediaSection({
           }}
           viewport={{
             once: true,
-            amount: 0.35,
+            amount: 0.25,
           }}
           transition={{
             duration: 0.8,
@@ -573,7 +652,7 @@ export function TimelineMediaSection({
 
             mx-auto
 
-            mt-28
+            mt-20
 
             max-w-4xl
 
@@ -581,17 +660,19 @@ export function TimelineMediaSection({
 
             text-center
 
-            sm:mt-36
+            sm:mt-24
 
-            md:mt-44
+            md:mt-28
           "
         >
+          {/* Línea */}
+
           <div
             aria-hidden="true"
             className="
               mx-auto
 
-              h-16
+              h-12
               w-px
 
               bg-gradient-to-b
@@ -599,11 +680,30 @@ export function TimelineMediaSection({
               from-transparent
               via-pink-100/30
               to-pink-100/60
+
+              sm:h-14
             "
           />
 
-          <div
+          {/* Estrella */}
+
+          <motion.div
             aria-hidden="true"
+            initial={{
+              opacity: 0,
+              scale: 0.7,
+            }}
+            whileInView={{
+              opacity: 1,
+              scale: 1,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.6,
+              delay: 0.1,
+            }}
             className="
               mt-4
 
@@ -615,13 +715,15 @@ export function TimelineMediaSection({
             "
           >
             ✦
-          </div>
+          </motion.div>
+
+          {/* Texto final */}
 
           <p
             className="
               mx-auto
 
-              mt-8
+              mt-7
 
               max-w-3xl
 
@@ -644,9 +746,11 @@ export function TimelineMediaSection({
             {section.outro}
           </p>
 
+          {/* Indicador */}
+
           <p
             className="
-              mt-8
+              mt-7
 
               text-[9px]
 
@@ -662,14 +766,16 @@ export function TimelineMediaSection({
             Fin de {section.chapter}
           </p>
 
+          {/* Línea inferior */}
+
           <div
             aria-hidden="true"
             className="
               mx-auto
 
-              mt-8
+              mt-7
 
-              h-16
+              h-14
               w-px
 
               bg-gradient-to-b
@@ -688,8 +794,12 @@ export function TimelineMediaSection({
       {nextSection && (
         <NextChapterTeaser
           id={nextSection.id}
-          chapter={nextSection.chapter}
-          title={nextSection.title}
+          chapter={
+            nextSection.chapter
+          }
+          title={
+            nextSection.title
+          }
         />
       )}
 
@@ -698,8 +808,8 @@ export function TimelineMediaSection({
       ===================================================== */}
 
       {!nextSection && (
-  <StoryEnding />
-)}
+        <StoryEnding />
+      )}
     </section>
   );
 }
