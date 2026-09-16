@@ -40,7 +40,18 @@ const TRACKS = [
     src:
       "/audio/03-playful-sweet-baby-piano.mp3",
   },
+
+  {
+    title:
+      "Kris R. & GeezyDee - BOBADITA",
+
+    src:
+      "/audio/04-Bobadita.mp3",
+  },
 ] as const;
+
+
+
 
 /* =========================================================
    CONFIGURACIÓN DE AUDIO
