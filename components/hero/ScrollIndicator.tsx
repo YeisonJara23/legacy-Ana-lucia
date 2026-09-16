@@ -2,37 +2,57 @@
 
 import { motion } from "framer-motion";
 
-export function ScrollIndicator() {
+type ScrollIndicatorProps = {
+  onClick?: () => void;
+};
+
+export function ScrollIndicator({
+  onClick,
+}: ScrollIndicatorProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
+    <motion.button
+      type="button"
+      onClick={onClick}
+      aria-label="Continuar hacia la historia"
+      initial={{
+        opacity: 0,
+      }}
       animate={{
         opacity: 1,
       }}
       transition={{
-        delay: 2,
-        duration: 1,
+        delay: 1.5,
+        duration: 0.8,
       }}
       className="
-        mt-16
+        group
 
         flex
         flex-col
+
         items-center
         justify-center
 
-        text-pink-100/80
+        text-pink-100/55
+
+        transition-colors
+        duration-300
+
+        hover:text-pink-100/85
       "
     >
       <span
         className="
-          mb-4
+          mb-2
 
-          text-xs
-
-          tracking-[0.45em]
+          text-[8px]
+          font-medium
 
           uppercase
+
+          tracking-[0.32em]
+
+          sm:text-[9px]
         "
       >
         Descubre
@@ -40,10 +60,10 @@ export function ScrollIndicator() {
 
       <motion.div
         animate={{
-          y: [0, 14, 0],
+          y: [0, 5, 0],
         }}
         transition={{
-          duration: 2,
+          duration: 2.2,
           repeat: Infinity,
           ease: "easeInOut",
         }}
@@ -53,23 +73,41 @@ export function ScrollIndicator() {
           items-center
         "
       >
-        <div className="h-10 w-px bg-pink-200/60" />
+        <div
+          className="
+            h-5
+            w-px
+
+            bg-gradient-to-b
+
+            from-pink-100/55
+            to-pink-100/15
+
+            sm:h-6
+          "
+        />
 
         <div
           className="
-            mt-2
+            mt-1.5
 
-            h-3
-            w-3
+            h-1.5
+            w-1.5
 
             rounded-full
 
-            bg-pink-200
+            bg-pink-100/70
 
-            shadow-[0_0_18px_rgba(255,210,235,.8)]
+            shadow-[0_0_12px_rgba(255,210,235,.55)]
+
+            transition-all
+            duration-300
+
+            group-hover:bg-pink-100
+            group-hover:shadow-[0_0_18px_rgba(255,210,235,.75)]
           "
         />
       </motion.div>
-    </motion.div>
+    </motion.button>
   );
 }

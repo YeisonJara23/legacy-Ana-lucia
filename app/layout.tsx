@@ -1,29 +1,56 @@
-import type { Metadata } from "next";
+import type {
+  Metadata,
+} from "next";
+
 import {
   Cormorant_Garamond,
   Lora,
 } from "next/font/google";
 
 import "./globals.css";
-import { Background } from "@/components/background/Background";
-import { TimelineNavigation } from "@/components/navigation";
-import { ReadingProgress } from "@/components/navigation/ReadingProgress";
 
-const display = Cormorant_Garamond({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["300", "400", "500", "600", "700"],
-});
+import {
+  Background,
+} from "@/components/background/Background";
+
+import {
+  BackgroundMusic,
+} from "@/components/audio/BackgroundMusic";
+
+import {
+  ReadingProgress,
+  TimelineNavigation,
+} from "@/components/navigation";
+
+const display =
+  Cormorant_Garamond({
+    subsets: ["latin"],
+    variable: "--font-display",
+    weight: [
+      "300",
+      "400",
+      "500",
+      "600",
+      "700",
+    ],
+  });
 
 const body = Lora({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["400", "500", "600"],
+  weight: [
+    "400",
+    "500",
+    "600",
+  ],
 });
 
 export const metadata: Metadata = {
-  title: "Para Siempre, Ana Lucía",
-  description: "Un legado construido con amor.",
+  title:
+    "Para Siempre, Ana Lucía",
+
+  description:
+    "Un legado construido con amor.",
 };
 
 export default function RootLayout({
@@ -41,8 +68,13 @@ export default function RootLayout({
         `}
       >
         <Background />
-        <TimelineNavigation />
+
         <ReadingProgress />
+
+        <TimelineNavigation />
+
+        <BackgroundMusic />
+
         {children}
       </body>
     </html>
