@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { NextChapterTeaser } from "./NextChapterTeaser";
 import { TimelineMedia } from "./TimelineMedia";
 import { ChapterAtmosphere } from "./ChapterAtmosphere";
+import { StoryEnding } from "@/components/story/StoryEnding";
 
 import type {
   TimelineMediaSectionData,
@@ -51,7 +52,7 @@ export function TimelineMediaSection({
 
           flex
 
-          min-h-[72svh]
+          min-h-[54svh]
 
           w-full
 
@@ -59,14 +60,14 @@ export function TimelineMediaSection({
           justify-center
 
           px-5
-          py-24
+          py-16
 
-          sm:min-h-[76svh]
+          sm:min-h-[58svh]
           sm:px-8
-          sm:py-28
+          sm:py-20
 
-          md:min-h-[82svh]
-          md:py-32
+          md:min-h-[64svh]
+          md:py-24
         "
       >
         {/* Número gigante */}
@@ -490,13 +491,13 @@ export function TimelineMediaSection({
               delay: 0.42,
             }}
             className="
-              mt-12
+              mt-8
 
               flex
               flex-col
               items-center
 
-              sm:mt-14
+              sm:mt-10
             "
           >
             <span
@@ -520,7 +521,7 @@ export function TimelineMediaSection({
               className="
                 mt-5
 
-                h-12
+                h-8
                 w-px
 
                 bg-gradient-to-b
@@ -528,7 +529,7 @@ export function TimelineMediaSection({
                 from-pink-100/50
                 to-transparent
 
-                sm:h-16
+                sm:h-10
               "
             />
           </motion.div>
@@ -697,103 +698,8 @@ export function TimelineMediaSection({
       ===================================================== */}
 
       {!nextSection && (
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.5,
-          }}
-          transition={{
-            duration: 0.7,
-          }}
-          className="
-            mx-auto
-
-            mb-32
-            mt-16
-
-            max-w-2xl
-
-            px-6
-
-            text-center
-
-            sm:mb-40
-          "
-        >
-          <div
-            className="
-              text-2xl
-              text-pink-200/70
-            "
-          >
-            ✦
-          </div>
-
-          <p
-            className="
-              mt-6
-
-              text-[9px]
-
-              uppercase
-
-              tracking-[0.35em]
-
-              text-white/35
-            "
-          >
-            Hasta aquí por ahora
-          </p>
-
-          <h3
-            className="
-              mt-5
-
-              font-display
-
-              text-3xl
-              font-light
-              italic
-
-              text-white
-
-              sm:text-4xl
-              md:text-5xl
-            "
-          >
-            La historia continúa…
-          </h3>
-
-          <p
-            className="
-              mx-auto
-
-              mt-5
-
-              max-w-lg
-
-              text-sm
-
-              leading-7
-
-              text-white/50
-
-              sm:text-base
-            "
-          >
-            Nuevos momentos seguirán
-            encontrando su lugar aquí.
-          </p>
-        </motion.div>
-      )}
+  <StoryEnding />
+)}
     </section>
   );
 }

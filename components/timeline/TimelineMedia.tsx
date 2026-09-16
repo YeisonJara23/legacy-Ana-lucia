@@ -41,11 +41,12 @@ export function TimelineMedia({
       className="
         relative
 
-        mt-16
+        mt-4
 
         bg-transparent
 
-        md:mt-20
+        md:mt-6
+        md:mt-8
       "
     >
       {items.map((item, index) => {

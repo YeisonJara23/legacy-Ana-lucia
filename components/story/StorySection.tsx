@@ -1,11 +1,21 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import {
+  motion,
+  type Variants,
+} from "framer-motion";
 
-import type { TimelinePhotoLayout } from "@/components/timeline/types";
+import type {
+  TimelinePhotoLayout,
+} from "@/components/timeline/types";
 
-import { StoryCaption } from "./StoryCaption";
-import { StoryPhoto } from "./StoryPhoto";
+import {
+  StoryCaption,
+} from "./StoryCaption";
+
+import {
+  StoryPhoto,
+} from "./StoryPhoto";
 
 type Props = {
   src: string;
@@ -20,20 +30,14 @@ type Props = {
   layout?: TimelinePhotoLayout;
 };
 
-/*
- * =========================================================
- * ANIMACIONES
- * =========================================================
- *
- * La sección controla la entrada.
- * Los elementos internos heredan el estado de animación,
- * evitando añadir lógica de scroll adicional.
- */
+/* =========================================================
+   ANIMACIONES
+========================================================= */
 
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 32,
+    y: 30,
   },
 
   visible: {
@@ -41,9 +45,8 @@ const sectionVariants: Variants = {
     y: 0,
 
     transition: {
-      duration: 0.65,
+      duration: 0.6,
       ease: "easeOut",
-
       staggerChildren: 0.08,
     },
   },
@@ -71,7 +74,7 @@ const photoVariants: Variants = {
 const captionVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 18,
+    y: 16,
     scale: 0.97,
   },
 
@@ -81,12 +84,16 @@ const captionVariants: Variants = {
     scale: 1,
 
     transition: {
-      duration: 0.65,
-      delay: 0.12,
+      duration: 0.6,
+      delay: 0.1,
       ease: "easeOut",
     },
   },
 };
+
+/* =========================================================
+   COMPONENTE
+========================================================= */
 
 export function StorySection({
   src,
@@ -100,11 +107,9 @@ export function StorySection({
 
   layout = "center",
 }: Props) {
-  /*
-   * =========================================================
-   * COMPOSICIÓN EDITORIAL
-   * =========================================================
-   */
+  /* =======================================================
+     COMPOSICIÓN DE LAS FOTOGRAFÍAS
+  ======================================================= */
 
   const layoutClasses: Record<
     TimelinePhotoLayout,
@@ -147,7 +152,10 @@ export function StorySection({
   };
 
   /*
-   * Posición del texto sobre la fotografía.
+   * En móvil el texto es parte del flujo normal.
+   *
+   * A partir de md vuelve a colocarse dentro
+   * de la fotografía.
    */
 
   const overlayPositionClasses: Record<
@@ -155,32 +163,26 @@ export function StorySection({
     string
   > = {
     center: `
-      left-1/2
-      -translate-x-1/2
+      md:left-1/2
+      md:-translate-x-1/2
     `,
 
     portrait: `
-      left-1/2
-      -translate-x-1/2
+      md:left-1/2
+      md:-translate-x-1/2
     `,
 
     wide: `
-      left-1/2
-      -translate-x-1/2
+      md:left-1/2
+      md:-translate-x-1/2
     `,
 
     left: `
-      left-1/2
-      -translate-x-1/2
-
       md:left-5
       md:translate-x-0
     `,
 
     right: `
-      left-1/2
-      -translate-x-1/2
-
       md:left-auto
       md:right-5
       md:translate-x-0
@@ -191,11 +193,14 @@ export function StorySection({
     TimelinePhotoLayout,
     string
   > = {
-    center: "text-center",
+    center:
+      "text-center",
 
-    portrait: "text-center",
+    portrait:
+      "text-center",
 
-    wide: "text-center",
+    wide:
+      "text-center",
 
     left: `
       text-center
@@ -212,22 +217,25 @@ export function StorySection({
     TimelinePhotoLayout,
     string
   > = {
-    center: "max-w-md",
+    center:
+      "max-w-md",
 
-    portrait: "max-w-sm",
+    portrait:
+      "max-w-sm",
 
-    wide: "max-w-lg",
+    wide:
+      "max-w-lg",
 
-    left: "max-w-md",
+    left:
+      "max-w-md",
 
-    right: "max-w-md",
+    right:
+      "max-w-md",
   };
 
-  /*
-   * =========================================================
-   * RECUERDO DESTACADO
-   * =========================================================
-   */
+  /* =======================================================
+     RECUERDO DESTACADO
+  ======================================================= */
 
   if (featured) {
     return (
@@ -244,22 +252,22 @@ export function StorySection({
 
           mx-auto
 
-          my-28
+          my-14
 
           w-full
           max-w-[980px]
 
           px-3
 
-          sm:my-36
+          sm:my-18
           sm:px-5
 
-          md:my-44
+          md:my-24
           md:px-8
         "
       >
         {/* =============================================
-            CABECERA DEL RECUERDO
+            CABECERA
         ============================================= */}
 
         <motion.div
@@ -267,19 +275,19 @@ export function StorySection({
           className="
             mx-auto
 
-            mb-10
+            mb-7
             max-w-3xl
 
             text-center
 
-            md:mb-14
+            sm:mb-9
+            md:mb-12
           "
         >
           <div
             aria-hidden="true"
             className="
               text-3xl
-
               text-pink-200
 
               drop-shadow-[0_0_20px_rgba(255,210,245,.7)]
@@ -292,18 +300,18 @@ export function StorySection({
 
           <p
             className="
-              mt-5
+              mt-4
 
-              text-[10px]
+              text-[9px]
               font-medium
 
               uppercase
 
-              tracking-[0.38em]
+              tracking-[0.36em]
 
-              text-pink-100/70
+              text-pink-100/65
 
-              sm:text-xs
+              sm:text-[10px]
             "
           >
             Recuerdo destacado
@@ -312,12 +320,13 @@ export function StorySection({
           {featuredTitle && (
             <h3
               className="
-                mt-5
+                mt-4
 
                 font-display
 
                 text-4xl
                 font-light
+
                 leading-[1.05]
 
                 text-white
@@ -338,24 +347,27 @@ export function StorySection({
             className="
               mx-auto
 
-              mt-8
+              mt-6
 
               h-px
-              w-24
+              w-20
 
               bg-gradient-to-r
 
               from-transparent
-              via-pink-100/70
+              via-pink-100/65
               to-transparent
 
-              sm:w-36
+              sm:mt-7
+              sm:w-28
+
+              md:w-36
             "
           />
         </motion.div>
 
         {/* =============================================
-            FOTO DESTACADA
+            FOTO + TEXTO
         ============================================= */}
 
         <motion.div
@@ -373,27 +385,31 @@ export function StorySection({
               pointer-events-none
 
               absolute
-              -inset-6
+              -inset-4
 
               -z-10
 
-              rounded-[50px]
+              rounded-[45px]
 
-              bg-pink-300/10
+              bg-pink-300/[0.08]
 
               opacity-70
 
-              blur-[60px]
+              blur-[50px]
 
               transition-opacity
               duration-700
 
               group-hover/photo:opacity-100
 
+              sm:-inset-6
+
               md:-inset-10
               md:blur-[90px]
             "
           />
+
+          {/* Foto */}
 
           <StoryPhoto
             src={src}
@@ -404,29 +420,39 @@ export function StorySection({
           />
 
           {/* =========================================
-              TEXTO DESTACADO
+              TEXTO
+
+              Móvil:
+              debajo de la imagen.
+
+              Escritorio:
+              dentro de la fotografía.
           ========================================= */}
 
           {caption.trim() && (
             <motion.div
               variants={captionVariants}
               className="
-                absolute
-
-                bottom-4
-                left-1/2
-
+                relative
                 z-10
 
-                w-[calc(100%-1.25rem)]
+                mx-auto
+
+                -mt-5
+
+                w-[calc(100%-1.5rem)]
                 max-w-2xl
 
-                -translate-x-1/2
-
-                sm:bottom-6
+                sm:-mt-6
                 sm:w-[calc(100%-2rem)]
 
+                md:absolute
                 md:bottom-8
+                md:left-1/2
+
+                md:mt-0
+
+                md:-translate-x-1/2
               "
             >
               <div
@@ -438,33 +464,39 @@ export function StorySection({
                   rounded-[20px]
 
                   border
-                  border-white/20
+                  border-white/15
 
-                  bg-black/30
+                  bg-[#3b2066]/80
 
                   px-4
-                  py-4
+                  py-3.5
 
                   text-center
 
-                  shadow-[0_18px_50px_rgba(0,0,0,.28)]
+                  shadow-[0_14px_38px_rgba(30,12,65,.30)]
 
                   backdrop-blur-xl
 
                   transition-all
                   duration-500
 
-                  group-hover/photo:border-pink-100/35
-                  group-hover/photo:bg-black/38
-
-                  group-hover/photo:shadow-[0_18px_55px_rgba(255,190,235,.12)]
+                  group-hover/photo:border-pink-100/30
 
                   sm:px-5
+                  sm:py-4
+
+                  md:border-white/20
+                  md:bg-black/30
 
                   md:px-6
+
+                  md:shadow-[0_18px_50px_rgba(0,0,0,.28)]
+
+                  md:group-hover/photo:bg-black/38
+                  md:group-hover/photo:shadow-[0_18px_55px_rgba(255,190,235,.12)]
                 "
               >
-                {/* Luz que aparece al hacer hover */}
+                {/* Resplandor */}
 
                 <div
                   aria-hidden="true"
@@ -472,27 +504,25 @@ export function StorySection({
                     pointer-events-none
 
                     absolute
-
+                    bottom-[-55px]
                     left-1/2
-                    top-full
 
-                    h-20
+                    h-24
                     w-52
 
                     -translate-x-1/2
 
                     rounded-full
 
-                    bg-pink-200/0
+                    bg-pink-200/[0.06]
 
                     blur-3xl
 
                     transition-all
                     duration-700
 
-                    group-hover/photo:top-1/2
-
-                    group-hover/photo:bg-pink-200/10
+                    md:bg-pink-200/0
+                    md:group-hover/photo:bg-pink-200/10
                   "
                 />
 
@@ -501,21 +531,23 @@ export function StorySection({
                     relative
                     z-10
 
-                    mb-2
+                    mb-1.5
 
-                    text-[9px]
+                    text-[8px]
                     font-medium
 
                     uppercase
 
-                    tracking-[0.3em]
+                    tracking-[0.28em]
 
-                    text-pink-100/65
+                    text-pink-100/60
 
                     transition-colors
                     duration-500
 
-                    group-hover/photo:text-pink-100/90
+                    sm:text-[9px]
+
+                    group-hover/photo:text-pink-100/85
                   "
                 >
                   Un momento para recordar
@@ -526,15 +558,15 @@ export function StorySection({
                     relative
                     z-10
 
-                    transition-all
+                    transition-transform
                     duration-500
-
-                    group-hover/photo:text-white
 
                     md:group-hover/photo:-translate-y-[1px]
                   "
                 >
-                  <StoryCaption size="featured">
+                  <StoryCaption
+                    size="featured"
+                  >
                     {caption}
                   </StoryCaption>
                 </div>
@@ -546,11 +578,9 @@ export function StorySection({
     );
   }
 
-  /*
-   * =========================================================
-   * RECUERDO NORMAL
-   * =========================================================
-   */
+  /* =======================================================
+     RECUERDO NORMAL
+  ======================================================= */
 
   return (
     <motion.section
@@ -564,30 +594,30 @@ export function StorySection({
       className={`
         relative
 
-        my-16
+        my-8
 
         w-full
 
         px-3
 
-        sm:my-20
+        sm:my-12
         sm:px-5
 
-        md:my-28
+        md:my-20
         md:px-6
 
         ${layoutClasses[layout]}
       `}
     >
       {/* =============================================
-          MARCADOR EDITORIAL
+          MARCADOR
       ============================================= */}
 
       <motion.div
         variants={captionVariants}
         aria-hidden="true"
         className={`
-          mb-5
+          mb-4
 
           flex
           items-center
@@ -609,7 +639,7 @@ export function StorySection({
             h-px
             w-7
 
-            bg-white/25
+            bg-white/20
           "
         />
 
@@ -628,7 +658,7 @@ export function StorySection({
             h-px
             w-7
 
-            bg-white/25
+            bg-white/20
           "
         />
       </motion.div>
@@ -655,18 +685,23 @@ export function StorySection({
           <motion.div
             variants={captionVariants}
             className={`
-              absolute
-
-              bottom-3
-
+              relative
               z-10
+
+              mx-auto
+
+              -mt-4
 
               w-[calc(100%-1rem)]
 
-              sm:bottom-4
+              sm:-mt-5
               sm:w-[calc(100%-1.5rem)]
 
+              md:absolute
               md:bottom-5
+
+              md:mt-0
+              md:mx-0
 
               ${overlayPositionClasses[layout]}
               ${overlayWidthClasses[layout]}
@@ -683,12 +718,12 @@ export function StorySection({
                 border
                 border-white/15
 
-                bg-black/28
+                bg-[#3b2066]/80
 
                 px-4
                 py-3
 
-                shadow-[0_14px_40px_rgba(0,0,0,.24)]
+                shadow-[0_14px_38px_rgba(30,12,65,.28)]
 
                 backdrop-blur-lg
 
@@ -697,14 +732,18 @@ export function StorySection({
 
                 group-hover/photo:border-pink-100/30
 
-                group-hover/photo:bg-black/36
+                md:bg-black/28
 
-                group-hover/photo:shadow-[0_14px_45px_rgba(255,190,235,.10)]
+                md:shadow-[0_14px_40px_rgba(0,0,0,.24)]
+
+                md:group-hover/photo:bg-black/36
+
+                md:group-hover/photo:shadow-[0_14px_45px_rgba(255,190,235,.10)]
 
                 ${overlayTextClasses[layout]}
               `}
             >
-              {/* Resplandor inferior */}
+              {/* Resplandor */}
 
               <div
                 aria-hidden="true"
@@ -713,7 +752,7 @@ export function StorySection({
 
                   absolute
 
-                  bottom-[-60px]
+                  bottom-[-55px]
                   left-1/2
 
                   h-24
@@ -723,16 +762,17 @@ export function StorySection({
 
                   rounded-full
 
-                  bg-pink-200/0
+                  bg-pink-200/[0.06]
 
                   blur-3xl
 
                   transition-all
                   duration-700
 
-                  group-hover/photo:bottom-[-35px]
+                  md:bg-pink-200/0
 
-                  group-hover/photo:bg-pink-200/[0.08]
+                  md:group-hover/photo:bottom-[-35px]
+                  md:group-hover/photo:bg-pink-200/[0.08]
                 "
               />
 
@@ -747,7 +787,9 @@ export function StorySection({
                   md:group-hover/photo:-translate-y-[1px]
                 "
               >
-                <StoryCaption size="compact">
+                <StoryCaption
+                  size="compact"
+                >
                   {caption}
                 </StoryCaption>
               </div>

@@ -1,6 +1,14 @@
+"use client";
+
 import Image from "next/image";
 
-import type { TimelinePhotoLayout } from "@/components/timeline/types";
+import {
+  useMemoryLightbox,
+} from "@/components/gallery/MemoryLightboxProvider";
+
+import type {
+  TimelinePhotoLayout,
+} from "@/components/timeline/types";
 
 type Props = {
   src: string;
@@ -21,39 +29,85 @@ export function StoryPhoto({
 
   layout = "center",
 }: Props) {
-  const imageHeightClasses: Record<TimelinePhotoLayout, string> = {
-    center: "max-h-[68vh]",
-    left: "max-h-[70vh]",
-    right: "max-h-[70vh]",
-    portrait: "max-h-[78vh]",
-    wide: "max-h-[76vh]",
+  const {
+    openMemory,
+  } = useMemoryLightbox();
+
+  const imageHeightClasses: Record<
+    TimelinePhotoLayout,
+    string
+  > = {
+    center:
+      "max-h-[68vh]",
+
+    left:
+      "max-h-[70vh]",
+
+    right:
+      "max-h-[70vh]",
+
+    portrait:
+      "max-h-[78vh]",
+
+    wide:
+      "max-h-[76vh]",
   };
 
-  const sizes: Record<TimelinePhotoLayout, string> = {
-    center: "(max-width: 640px) 92vw, (max-width: 1024px) 78vw, 760px",
-    left: "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
-    right: "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
-    portrait: "(max-width: 640px) 88vw, (max-width: 1024px) 64vw, 620px",
-    wide: "(max-width: 640px) 94vw, (max-width: 1024px) 90vw, 1080px",
+  const sizes: Record<
+    TimelinePhotoLayout,
+    string
+  > = {
+    center:
+      "(max-width: 640px) 92vw, (max-width: 1024px) 78vw, 760px",
+
+    left:
+      "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
+
+    right:
+      "(max-width: 640px) 92vw, (max-width: 1024px) 82vw, 920px",
+
+    portrait:
+      "(max-width: 640px) 88vw, (max-width: 1024px) 64vw, 620px",
+
+    wide:
+      "(max-width: 640px) 94vw, (max-width: 1024px) 90vw, 1080px",
   };
 
   return (
-    <div
+    <button
+      type="button"
+
+      onClick={() =>
+        openMemory(src)
+      }
+
+      aria-label={`Abrir fotografía: ${alt}`}
+
       className={`
+        group/image
+
         relative
 
         flex
         min-h-[260px]
+
         w-full
+
         items-center
         justify-center
 
         overflow-hidden
+
         rounded-[24px]
 
         border
 
-        ${featured ? "border-pink-100/25" : "border-white/15"}
+        text-left
+
+        ${featured
+          ? "border-pink-100/25"
+          : "border-white/15"
+        }
 
         bg-black/10
 
@@ -67,38 +121,79 @@ export function StoryPhoto({
         ring-inset
         ring-white/10
 
+        transition-all
+        duration-500
+
+        hover:border-pink-100/25
+
+        focus:outline-none
+
+        focus-visible:ring-2
+        focus-visible:ring-pink-100/60
+
+        active:scale-[0.995]
+
         sm:rounded-[30px]
+
         md:rounded-[36px]
       `}
     >
       <Image
         src={src}
         alt={alt}
-        width={layout === "wide" ? 1600 : 1200}
-        height={layout === "portrait" ? 1800 : 1500}
+
+        width={
+          layout === "wide"
+            ? 1600
+            : 1200
+        }
+
+        height={
+          layout === "portrait"
+            ? 1800
+            : 1500
+        }
+
         priority={priority}
-        loading={priority ? "eager" : "lazy"}
-        quality={featured ? 76 : 72}
-        sizes={sizes[layout]}
+
+        loading={
+          priority
+            ? "eager"
+            : "lazy"
+        }
+
+        quality={
+          featured
+            ? 76
+            : 72
+        }
+
+        sizes={
+          sizes[layout]
+        }
+
         className={`
           block
 
           h-auto
+
           ${imageHeightClasses[layout]}
+
           w-auto
           max-w-full
 
           object-contain
 
           transition-transform
-duration-[1200ms]
-ease-out
+          duration-[1200ms]
+          ease-out
 
-md:group-hover/photo:scale-[1.018]
+          md:group-hover/photo:scale-[1.018]
         `}
       />
 
-      {/* Degradado superior e inferior para que el texto resalte mejor */}
+      {/* Gradiente */}
+
       <div
         aria-hidden="true"
         className="
@@ -115,6 +210,8 @@ md:group-hover/photo:scale-[1.018]
         "
       />
 
+      {/* Glow featured */}
+
       {featured && (
         <div
           aria-hidden="true"
@@ -128,6 +225,8 @@ md:group-hover/photo:scale-[1.018]
           "
         />
       )}
+
+      {/* Borde */}
 
       <div
         aria-hidden="true"
@@ -146,6 +245,61 @@ md:group-hover/photo:scale-[1.018]
           md:rounded-[36px]
         "
       />
-    </div>
+
+      {/* =============================================
+          INDICADOR PARA ABRIR
+      ============================================= */}
+
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+
+          absolute
+          right-3
+          top-3
+
+          z-10
+
+          flex
+          h-9
+          w-9
+
+          items-center
+          justify-center
+
+          rounded-full
+
+          border
+          border-white/15
+
+          bg-black/20
+
+          text-sm
+
+          text-white/65
+
+          opacity-90
+
+          backdrop-blur-lg
+
+          transition-all
+          duration-300
+
+          group-hover/image:scale-105
+          group-hover/image:border-pink-100/30
+          group-hover/image:bg-black/35
+          group-hover/image:text-white
+
+          sm:right-4
+          sm:top-4
+
+          md:opacity-0
+          md:group-hover/image:opacity-100
+        "
+      >
+        ↗
+      </div>
+    </button>
   );
 }
